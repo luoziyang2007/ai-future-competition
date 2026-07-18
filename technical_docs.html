@@ -3,846 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI未来人才大赛 - 技术方案深化文档</title>
+    <title>技术方案文档 - AI未来人才大赛</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
-            padding: 40px 20px;
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 950px;
-            margin: 0 auto;
-        }
-        .header {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-            color: white;
-            padding: 48px;
-            border-radius: 24px;
-            text-align: center;
-            margin-bottom: 32px;
-            box-shadow: 0 10px 40px rgba(255, 107, 107, 0.3);
-        }
-        .header h1 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
-        }
-        .header p {
-            opacity: 0.9;
-            font-size: 16px;
-            font-weight: 300;
-        }
-        .section {
-            background: white;
-            border-radius: 20px;
-            padding: 36px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-        .section:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-        }
-        .section-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .section-title::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: #ff6b6b;
-            border-radius: 2px;
-        }
-        .architecture-diagram {
-            background: #f8f9fa;
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-        .architecture-diagram::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #ff6b6b 0%, #f59e0b 50%, #10b981 100%);
-        }
-        .arch-layer {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .arch-layer:last-child { margin-bottom: 0; }
-        .layer-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding-left: 8px;
-        }
-        .layer-boxes {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .layer-box {
-            flex: 1;
-            min-width: 180px;
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-            border: 2px solid;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        .layer-box:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-        .layer-box.frontend { border-color: #3b82f6; }
-        .layer-box.api { border-color: #667eea; }
-        .layer-box.ai { border-color: #f59e0b; }
-        .layer-box.data { border-color: #8b5cf6; }
-        .layer-box.infra { border-color: #10b981; }
-        .layer-box-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-        .layer-box-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 4px;
-        }
-        .layer-box-desc {
-            font-size: 11px;
-            color: #999;
-        }
-        .flowchart-container {
-            background: #f8f9fa;
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 24px;
-            overflow-x: auto;
-        }
-        .flow-step {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-        .flow-step:last-child { margin-bottom: 0; }
-        .flow-node {
-            background: white;
-            border: 2px solid #ff6b6b;
-            border-radius: 12px;
-            padding: 16px 24px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 600;
-            color: #333;
-            min-width: 140px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-        .flow-node:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-        }
-        .flow-node.start { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border-color: #10b981; }
-        .flow-node.end { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-color: #667eea; }
-        .flow-node.ai { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; border-color: #f59e0b; }
-        .flow-node.api { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border-color: #3b82f6; }
-        .flow-arrow {
-            font-size: 24px;
-            color: #999;
-            min-width: 40px;
-            text-align: center;
-        }
-        .flow-description {
-            font-size: 14px;
-            color: #666;
-            margin-top: 20px;
-            padding-left: 16px;
-            border-left: 3px solid #ff6b6b;
-            line-height: 1.8;
-        }
-        .timeline-section {
-            background: #f8f9fa;
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 24px;
-            position: relative;
-        }
-        .timeline-section::before {
-            content: '';
-            position: absolute;
-            left: 40px;
-            top: 32px;
-            bottom: 32px;
-            width: 3px;
-            background: linear-gradient(180deg, #ff6b6b 0%, #f59e0b 33%, #10b981 66%, #3b82f6 100%);
-            border-radius: 2px;
-        }
-        .timeline-item {
-            position: relative;
-            padding-left: 80px;
-            margin-bottom: 32px;
-        }
-        .timeline-item:last-child { margin-bottom: 0; }
-        .timeline-dot {
-            position: absolute;
-            left: 30px;
-            top: 0;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: white;
-            border: 4px solid;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        .timeline-item.phase1 .timeline-dot { border-color: #ff6b6b; }
-        .timeline-item.phase2 .timeline-dot { border-color: #f59e0b; }
-        .timeline-item.phase3 .timeline-dot { border-color: #10b981; }
-        .timeline-item.phase4 .timeline-dot { border-color: #3b82f6; }
-        .timeline-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .timeline-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: #333;
-        }
-        .timeline-date {
-            font-size: 12px;
-            color: #999;
-            font-weight: 500;
-        }
-        .timeline-desc {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
-        .timeline-tasks {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .timeline-task {
-            padding: 6px 12px;
-            background: white;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #666;
-            font-weight: 500;
-            border: 1px solid #e5e7eb;
-            transition: all 0.2s ease;
-        }
-        .timeline-task:hover {
-            background: #ff6b6b;
-            color: white;
-            border-color: #ff6b6b;
-        }
-        .tech-stack {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-top: 20px;
-        }
-        .tech-card {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #e5e7eb;
-            transition: all 0.3s ease;
-        }
-        .tech-card:hover {
-            background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transform: translateY(-2px);
-        }
-        .tech-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-        .tech-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 4px;
-        }
-        .tech-desc {
-            font-size: 12px;
-            color: #999;
-        }
-        .api-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .api-table th, .api-table td {
-            padding: 14px;
-            text-align: left;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 13px;
-        }
-        .api-table th {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: #666;
-        }
-        .api-table td { color: #333; }
-        .api-table .method {
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            display: inline-block;
-        }
-        .method.get { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
-        .method.post { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-        .code-block {
-            background: #1e1e1e;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 16px;
-            overflow-x: auto;
-            position: relative;
-        }
-        .code-block::before {
-            content: 'JSON';
-            position: absolute;
-            top: 8px;
-            right: 12px;
-            font-size: 10px;
-            color: #666;
-            text-transform: uppercase;
-        }
-        .code-block pre {
-            color: #d4d4d4;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 12px;
-            line-height: 1.6;
-            margin: 0;
-        }
-        .challenge-card {
-            background: rgba(239, 68, 68, 0.05);
-            border-left: 4px solid #ef4444;
-            border-radius: 0 12px 12px 0;
-            padding: 20px;
-            margin-bottom: 16px;
-            transition: all 0.3s ease;
-        }
-        .challenge-card:hover {
-            background: rgba(239, 68, 68, 0.08);
-        }
-        .challenge-card h4 {
-            font-size: 15px;
-            font-weight: 600;
-            color: #dc2626;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .challenge-card p {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.7;
-        }
-        .solution-card {
-            background: rgba(16, 185, 129, 0.05);
-            border-left: 4px solid #10b981;
-            border-radius: 0 12px 12px 0;
-            padding: 20px;
-            margin-bottom: 20px;
-            margin-top: -8px;
-            transition: all 0.3s ease;
-        }
-        .solution-card:hover {
-            background: rgba(16, 185, 129, 0.08);
-        }
-        .solution-card h4 {
-            font-size: 15px;
-            font-weight: 600;
-            color: #059669;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .solution-card p {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.7;
-        }
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .metric-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #f0f0f0 100%);
-            border-radius: 16px;
-            padding: 24px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        .metric-card:hover {
-            background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        .metric-value {
-            font-size: 40px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-        .metric-label {
-            font-size: 13px;
-            color: #666;
-            font-weight: 500;
-        }
-        .footer {
-            text-align: center;
-            padding: 28px;
-            color: #999;
-            font-size: 13px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; }
+        .header { background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: white; padding: 60px 20px; text-align: center; }
+        .header h1 { font-size: 36px; margin-bottom: 12px; }
+        .header p { font-size: 16px; opacity: 0.9; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        .section { background: white; border-radius: 20px; padding: 32px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .section h2 { font-size: 22px; color: #333; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #ec4899; }
+        .tech-stack { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .tech-item { padding: 20px; background: #fdf2f8; border-radius: 12px; text-align: center; }
+        .tech-item .icon { font-size: 32px; margin-bottom: 8px; }
+        .tech-item h4 { font-size: 14px; color: #333; margin-bottom: 4px; }
+        .tech-item p { font-size: 12px; color: #666; }
+        .architecture { height: 350px; background: #f8fafc; border-radius: 16px; position: relative; padding: 20px; }
+        .layer { position: absolute; left: 0; right: 0; padding: 16px; border-radius: 12px; text-align: center; }
+        .layer.l1 { top: 20px; background: #fce7f3; }
+        .layer.l2 { top: 90px; background: #fbcfe8; }
+        .layer.l3 { top: 160px; background: #f9a8d4; }
+        .layer.l4 { top: 230px; background: #f472b6; }
+        .layer.l5 { top: 300px; background: #ec4899; color: white; }
+        .layer h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+        .layer p { font-size: 12px; opacity: 0.8; }
+        .timeline { position: relative; padding-left: 40px; }
+        .timeline::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 2px; background: #ec4899; }
+        .timeline-item { position: relative; margin-bottom: 32px; }
+        .timeline-item::before { content: ''; position: absolute; left: -33px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: #ec4899; }
+        .timeline-item h4 { font-size: 16px; color: #333; margin-bottom: 8px; }
+        .timeline-item p { font-size: 14px; color: #666; line-height: 1.5; }
+        .roadmap-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .roadmap-item { padding: 20px; border-radius: 12px; text-align: center; }
+        .roadmap-item.phase1 { background: #fef3c7; }
+        .roadmap-item.phase2 { background: #dbeafe; }
+        .roadmap-item.phase3 { background: #dcfce7; }
+        .roadmap-item.phase4 { background: #fce7f3; }
+        .roadmap-item h4 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+        .roadmap-item p { font-size: 12px; color: #666; }
     </style>
 </head>
 <body>
+    <div class="header">
+        <h1>🔧 技术方案文档</h1>
+        <p>详细的AI agent架构设计、RAG知识库结构</p>
+    </div>
     <div class="container">
-        <div class="header">
-            <h1>AI智能关怀助手技术方案文档</h1>
-            <p>详细技术架构设计与实施路线图</p>
-        </div>
-
         <div class="section">
-            <div class="section-title">系统架构全景图</div>
-            
-            <div class="architecture-diagram">
-                <div class="arch-layer">
-                    <div class="layer-title">前端展示层</div>
-                    <div class="layer-boxes">
-                        <div class="layer-box frontend">
-                            <div class="layer-box-icon">📱</div>
-                            <div class="layer-box-title">小程序前端</div>
-                            <div class="layer-box-desc">用户交互界面</div>
-                        </div>
-                        <div class="layer-box frontend">
-                            <div class="layer-box-icon">💬</div>
-                            <div class="layer-box-title">对话组件</div>
-                            <div class="layer-box-desc">AI对话交互</div>
-                        </div>
-                        <div class="layer-box frontend">
-                            <div class="layer-box-icon">📤</div>
-                            <div class="layer-box-title">推送通知</div>
-                            <div class="layer-box-desc">消息推送展示</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="arch-layer">
-                    <div class="layer-title">API网关层</div>
-                    <div class="layer-boxes">
-                        <div class="layer-box api">
-                            <div class="layer-box-icon">🚪</div>
-                            <div class="layer-box-title">API网关</div>
-                            <div class="layer-box-desc">请求路由与鉴权</div>
-                        </div>
-                        <div class="layer-box api">
-                            <div class="layer-box-icon">🔒</div>
-                            <div class="layer-box-title">认证服务</div>
-                            <div class="layer-box-desc">JWT Token鉴权</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="arch-layer">
-                    <div class="layer-title">AI核心引擎层</div>
-                    <div class="layer-boxes">
-                        <div class="layer-box ai">
-                            <div class="layer-box-icon">🧠</div>
-                            <div class="layer-box-title">场景识别引擎</div>
-                            <div class="layer-box-desc">多源数据融合分析</div>
-                        </div>
-                        <div class="layer-box ai">
-                            <div class="layer-box-icon">🤖</div>
-                            <div class="layer-box-title">AI对话生成</div>
-                            <div class="layer-box-desc">大语言模型调用</div>
-                        </div>
-                        <div class="layer-box ai">
-                            <div class="layer-box-icon">🔍</div>
-                            <div class="layer-box-title">RAG检索</div>
-                            <div class="layer-box-desc">知识库语义检索</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="arch-layer">
-                    <div class="layer-title">数据存储层</div>
-                    <div class="layer-boxes">
-                        <div class="layer-box data">
-                            <div class="layer-box-icon">📊</div>
-                            <div class="layer-box-title">用户画像库</div>
-                            <div class="layer-box-desc">消费偏好与行为数据</div>
-                        </div>
-                        <div class="layer-box data">
-                            <div class="layer-box-icon">📚</div>
-                            <div class="layer-box-title">向量数据库</div>
-                            <div class="layer-box-desc">Milvus/Pinecone</div>
-                        </div>
-                        <div class="layer-box data">
-                            <div class="layer-box-icon">☁️</div>
-                            <div class="layer-box-title">外部数据源</div>
-                            <div class="layer-box-desc">天气/位置API</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="arch-layer">
-                    <div class="layer-title">基础设施层</div>
-                    <div class="layer-boxes">
-                        <div class="layer-box infra">
-                            <div class="layer-box-icon">🐳</div>
-                            <div class="layer-box-title">容器化部署</div>
-                            <div class="layer-box-desc">Docker/Kubernetes</div>
-                        </div>
-                        <div class="layer-box infra">
-                            <div class="layer-box-icon">⚡</div>
-                            <div class="layer-box-title">缓存服务</div>
-                            <div class="layer-box-desc">Redis缓存</div>
-                        </div>
-                        <div class="layer-box infra">
-                            <div class="layer-box-icon">📡</div>
-                            <div class="layer-box-title">消息队列</div>
-                            <div class="layer-box-desc">事件驱动架构</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <p style="font-size: 14px; color: #666; text-align: center;">系统采用微服务架构，各模块解耦，支持独立扩展和部署</p>
-        </div>
-
-        <div class="section">
-            <div class="section-title">AI Agent 协作流程图</div>
-            
-            <div class="flowchart-container">
-                <div class="flow-step">
-                    <div class="flow-node start">事件触发</div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-node">场景识别引擎</div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-node">用户画像查询</div>
-                </div>
-                <div class="flow-step">
-                    <div style="width: 154px;"></div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-node api">外部数据API</div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-node ai">AI意图理解</div>
-                </div>
-                <div class="flow-step">
-                    <div style="width: 154px;"></div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-node">RAG知识库检索</div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-node ai">AI回复生成</div>
-                </div>
-                <div class="flow-step">
-                    <div style="width: 154px;"></div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-node">推送服务</div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-node end">用户交互</div>
-                </div>
-            </div>
-
-            <div class="flow-description">
-                <strong>流程说明：</strong><br>
-                系统通过事件触发器感知场景变化 → 场景识别引擎分析当前场景类型 → 查询用户画像获取偏好信息 → 调用外部API获取实时数据 → AI意图理解模块分析用户需求 → RAG知识库检索相关策略 → AI生成个性化回复 → 推送服务发送消息 → 用户点击交互完成闭环
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">技术栈选型</div>
-            
+            <h2>🛠️ 技术栈</h2>
             <div class="tech-stack">
-                <div class="tech-card">
-                    <div class="tech-icon">⚛️</div>
-                    <div class="tech-name">React / Taro</div>
-                    <div class="tech-desc">小程序前端框架</div>
-                </div>
-                <div class="tech-card">
-                    <div class="tech-icon">🐍</div>
-                    <div class="tech-name">Python / FastAPI</div>
-                    <div class="tech-desc">后端API服务</div>
-                </div>
-                <div class="tech-card">
-                    <div class="tech-icon">🧠</div>
-                    <div class="tech-name">LLM API</div>
-                    <div class="tech-desc">对话生成能力</div>
-                </div>
-                <div class="tech-card">
-                    <div class="tech-icon">📚</div>
-                    <div class="tech-name">Milvus</div>
-                    <div class="tech-desc">向量数据库</div>
-                </div>
-                <div class="tech-card">
-                    <div class="tech-icon">🐳</div>
-                    <div class="tech-name">Docker</div>
-                    <div class="tech-desc">容器化部署</div>
-                </div>
-                <div class="tech-card">
-                    <div class="tech-icon">☸️</div>
-                    <div class="tech-name">Kubernetes</div>
-                    <div class="tech-desc">容器编排</div>
-                </div>
-                <div class="tech-card">
-                    <div class="tech-icon">⚡</div>
-                    <div class="tech-name">Redis</div>
-                    <div class="tech-desc">缓存服务</div>
-                </div>
-                <div class="tech-card">
-                    <div class="tech-icon">📡</div>
-                    <div class="tech-name">Kafka</div>
-                    <div class="tech-desc">消息队列</div>
-                </div>
+                <div class="tech-item"><div class="icon">🤖</div><h4>LLM模型</h4><p>GPT-4 / Claude</p></div>
+                <div class="tech-item"><div class="icon">📚</div><h4>RAG知识库</h4><p>向量数据库</p></div>
+                <div class="tech-item"><div class="icon">🌐</div><h4>前端框架</h4><p>React / Vue</p></div>
+                <div class="tech-item"><div class="icon">⚙️</div><h4>后端服务</h4><p>FastAPI / Node.js</p></div>
             </div>
         </div>
 
         <div class="section">
-            <div class="section-title">API 接口规范</div>
-            
-            <h3 style="font-size: 15px; font-weight: 600; color: #333; margin-bottom: 16px;">核心接口列表</h3>
-            <table class="api-table">
-                <thead>
-                    <tr>
-                        <th>接口名称</th>
-                        <th>方法</th>
-                        <th>路径</th>
-                        <th>功能描述</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>场景识别</td>
-                        <td><span class="method post">POST</span></td>
-                        <td>/api/scene/detect</td>
-                        <td>根据用户行为和环境数据识别当前场景</td>
-                    </tr>
-                    <tr>
-                        <td>用户画像查询</td>
-                        <td><span class="method get">GET</span></td>
-                        <td>/api/user/profile/{userId}</td>
-                        <td>获取用户画像信息（偏好、消费习惯等）</td>
-                    </tr>
-                    <tr>
-                        <td>AI对话生成</td>
-                        <td><span class="method post">POST</span></td>
-                        <td>/api/ai/generate</td>
-                        <td>生成个性化对话回复</td>
-                    </tr>
-                    <tr>
-                        <td>知识库检索</td>
-                        <td><span class="method post">POST</span></td>
-                        <td>/api/rag/search</td>
-                        <td>检索相关知识和话术模板</td>
-                    </tr>
-                    <tr>
-                        <td>推送发送</td>
-                        <td><span class="method post">POST</span></td>
-                        <td>/api/push/send</td>
-                        <td>发送智能关怀推送消息</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3 style="font-size: 15px; font-weight: 600; color: #333; margin-top: 24px; margin-bottom: 12px;">AI对话生成接口示例</h3>
-            <div class="code-block">
-                <pre>// 请求示例
-POST /api/ai/generate
-Content-Type: application/json
-
-{
-  "userId": "u12345",
-  "sceneType": "overtime",
-  "context": "用户当前处于加班状态，已连续工作8小时",
-  "userProfile": {
-    "preferredProduct": "冰美式",
-    "avgOrderValue": 18,
-    "memberLevel": "gold"
-  }
-}
-
-// 响应示例
-{
-  "code": 200,
-  "message": "success",
-  "data": {
-    "reply": "嗨，我注意到您今天工作到很晚了，辛苦了！要不要来一杯提神的冰美式？",
-    "recommendations": [
-      { "productId": "p001", "name": "冰美式咖啡", "price": 15.9, "tag": "加班特惠" },
-      { "productId": "p002", "name": "元气小食组合", "price": 12.9, "tag": "能量补给" }
-    ],
-    "quickReplies": ["好啊，来一杯", "不用了，谢谢"]
-  }
-}</pre>
+            <h2>🏗️ 系统架构（5层设计）</h2>
+            <div class="architecture">
+                <div class="layer l1"><h4>表现层 (Presentation Layer)</h4><p>用户界面、对话交互、推送通知</p></div>
+                <div class="layer l2"><h4>应用层 (Application Layer)</h4><p>业务逻辑、情景分析、推荐引擎</p></div>
+                <div class="layer l3"><h4>服务层 (Service Layer)</h4><p>LLM调用、RAG检索、API网关</p></div>
+                <div class="layer l4"><h4>数据层 (Data Layer)</h4><p>用户画像、情景数据、知识库</p></div>
+                <div class="layer l5"><h4>基础设施层 (Infrastructure)</h4><p>云服务、数据库、缓存系统</p></div>
             </div>
         </div>
 
         <div class="section">
-            <div class="section-title">实施路线图</div>
-            
-            <div class="timeline-section">
-                <div class="timeline-item phase1">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-header">
-                        <div class="timeline-title">第一阶段：基础能力建设</div>
-                        <div class="timeline-date">第1-4周</div>
-                    </div>
-                    <div class="timeline-desc">搭建核心技术框架，实现基础场景识别和对话能力</div>
-                    <div class="timeline-tasks">
-                        <div class="timeline-task">基础设施搭建</div>
-                        <div class="timeline-task">API网关开发</div>
-                        <div class="timeline-task">用户画像系统</div>
-                        <div class="timeline-task">基础场景识别</div>
-                    </div>
-                </div>
-
-                <div class="timeline-item phase2">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-header">
-                        <div class="timeline-title">第二阶段：AI能力集成</div>
-                        <div class="timeline-date">第5-8周</div>
-                    </div>
-                    <div class="timeline-desc">集成大语言模型，构建RAG知识库，实现智能对话</div>
-                    <div class="timeline-tasks">
-                        <div class="timeline-task">LLM接口集成</div>
-                        <div class="timeline-task">向量数据库部署</div>
-                        <div class="timeline-task">知识库构建</div>
-                        <div class="timeline-task">Prompt工程优化</div>
-                    </div>
-                </div>
-
-                <div class="timeline-item phase3">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-header">
-                        <div class="timeline-title">第三阶段：场景化功能开发</div>
-                        <div class="timeline-date">第9-12周</div>
-                    </div>
-                    <div class="timeline-desc">开发核心场景功能（加班关怀、天气关怀等），优化推送策略</div>
-                    <div class="timeline-tasks">
-                        <div class="timeline-task">加班关怀场景</div>
-                        <div class="timeline-task">天气关怀场景</div>
-                        <div class="timeline-task">推送策略优化</div>
-                        <div class="timeline-task">A/B测试框架</div>
-                    </div>
-                </div>
-
-                <div class="timeline-item phase4">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-header">
-                        <div class="timeline-title">第四阶段：上线与迭代</div>
-                        <div class="timeline-date">第13-16周</div>
-                    </div>
-                    <div class="timeline-desc">灰度上线，收集用户反馈，持续优化模型和策略</div>
-                    <div class="timeline-tasks">
-                        <div class="timeline-task">灰度发布</div>
-                        <div class="timeline-task">数据监控</div>
-                        <div class="timeline-task">用户反馈收集</div>
-                        <div class="timeline-task">模型迭代优化</div>
-                    </div>
-                </div>
+            <h2>📅 实施路线图（4阶段）</h2>
+            <div class="roadmap-grid">
+                <div class="roadmap-item phase1"><h4>Phase 1</h4><p>基础架构搭建<br>原型开发</p></div>
+                <div class="roadmap-item phase2"><h4>Phase 2</h4><p>情景感知模块<br>推荐算法优化</p></div>
+                <div class="roadmap-item phase3"><h4>Phase 3</h4><p>用户测试<br>A/B验证</p></div>
+                <div class="roadmap-item phase4"><h4>Phase 4</h4><p>上线部署<br>迭代优化</p></div>
             </div>
         </div>
 
         <div class="section">
-            <div class="section-title">预期性能指标</div>
-            
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-value">50ms</div>
-                    <div class="metric-label">场景识别响应时间</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">200ms</div>
-                    <div class="metric-label">AI对话生成延迟</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">99.9%</div>
-                    <div class="metric-label">系统可用性</div>
-                </div>
+            <h2>📋 详细时间规划</h2>
+            <div class="timeline">
+                <div class="timeline-item"><h4>第1-2周：需求分析与设计</h4><p>完成用户调研、需求文档撰写、系统架构设计</p></div>
+                <div class="timeline-item"><h4>第3-4周：核心模块开发</h4><p>搭建基础框架、实现情景感知引擎、开发RAG知识库</p></div>
+                <div class="timeline-item"><h4>第5-6周：算法优化与测试</h4><p>优化推荐算法、进行用户测试、完善交互体验</p></div>
+                <div class="timeline-item"><h4>第7-8周：上线部署与迭代</h4><p>完成部署、上线试运行、收集反馈并迭代优化</p></div>
             </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">技术实现难点与解决方案</div>
-            
-            <div class="challenge-card">
-                <h4>🎯 难点一：场景识别准确性</h4>
-                <p>如何准确识别用户当前所处场景（如加班、雨天）是系统的核心挑战。单一数据源可能存在误判，例如用户晚归可能是加班也可能是娱乐。</p>
-            </div>
-            <div class="solution-card">
-                <h4>✅ 解决方案：多源数据融合 + 机器学习模型</h4>
-                <p>结合时间数据、用户位置、设备使用状态、历史行为等多维度数据，训练场景识别模型。采用规则引擎 + 机器学习的混合方案：首先通过规则引擎筛选明显场景（如下雨时的天气API），然后通过机器学习模型对模糊场景进行概率判断，提升识别准确率。</p>
-            </div>
-
-            <div class="challenge-card">
-                <h4>🎯 难点二：对话生成的个性化与可控性平衡</h4>
-                <p>AI生成的对话需要既个性化又符合品牌调性，避免出现不当内容或偏离服务目标。</p>
-            </div>
-            <div class="solution-card">
-                <h4>✅ 解决方案：Prompt工程 + RAG检索</h4>
-                <p>通过精心设计的Prompt模板约束AI输出格式和内容范围，同时利用RAG技术检索品牌话术库和场景模板，确保回复符合品牌调性。引入人工审核机制，对高风险场景的回复进行二次确认。</p>
-            </div>
-
-            <div class="challenge-card">
-                <h4>🎯 难点三：实时推送的时效性与成本控制</h4>
-                <p>场景变化可能随时发生（如突然下雨），需要及时推送关怀消息，但高频推送可能导致用户反感和运营成本增加。</p>
-            </div>
-            <div class="solution-card">
-                <h4>✅ 解决方案：事件驱动架构 + 智能推送策略</h4>
-                <p>采用事件驱动架构，当场景变化时实时触发推送判断。引入推送频率控制机制，根据用户活跃度和偏好设置推送阈值。通过A/B测试不断优化推送策略，在时效性和用户体验之间取得平衡。</p>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>技术方案版本：v1.0 | 文档日期：2026年7月</p>
-            <p style="margin-top: 8px;">本方案基于最新技术栈设计，可根据实际需求调整</p>
         </div>
     </div>
 </body>

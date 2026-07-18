@@ -2,682 +2,102 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI智能关怀助手 - Demo</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .app-container {
-            width: 100%;
-            max-width: 375px;
-            background: #fff;
-            border-radius: 30px;
-            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4);
-            overflow: hidden;
-            position: relative;
-        }
-        .status-bar {
-            height: 44px;
-            background: #000;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        .status-left { display: flex; align-items: center; gap: 4px; }
-        .status-right { display: flex; align-items: center; gap: 8px; font-size: 16px; }
-        .header {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-            color: white;
-            padding: 24px 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            position: relative;
-        }
-        .avatar {
-            width: 52px;
-            height: 52px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        .header-info { flex: 1; }
-        .header-title { font-size: 18px; font-weight: 700; }
-        .header-subtitle { font-size: 12px; opacity: 0.9; margin-top: 2px; }
-        .context-info {
-            background: #f8f9fa;
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            border-bottom: 1px solid #eee;
-        }
-        .context-item { display: flex; align-items: center; gap: 6px; color: #555; }
-        .context-item .icon { font-size: 16px; }
-        .scene-switch {
-            display: flex;
-            background: #f0f4f8;
-            padding: 10px;
-            gap: 10px;
-        }
-        .scene-btn {
-            flex: 1;
-            padding: 12px 16px;
-            border: none;
-            border-radius: 24px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: white;
-            color: #666;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        }
-        .scene-btn.active {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-            color: white;
-            box-shadow: 0 6px 20px rgba(238, 90, 90, 0.4);
-            transform: translateY(-2px);
-        }
-        .chat-container {
-            height: 520px;
-            overflow-y: auto;
-            padding: 16px;
-            background: #fafafa;
-            scrollbar-width: none;
-        }
-        .chat-container::-webkit-scrollbar { display: none; }
-        .message {
-            display: flex;
-            margin-bottom: 20px;
-            animation: fadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .message.ai { justify-content: flex-start; }
-        .message.user { justify-content: flex-end; }
-        .message-bubble {
-            max-width: 75%;
-            padding: 14px 18px;
-            border-radius: 24px;
-            font-size: 15px;
-            line-height: 1.6;
-            position: relative;
-        }
-        .ai .message-bubble {
-            background: white;
-            color: #333;
-            border-radius: 24px 24px 24px 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-        }
-        .user .message-bubble {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-            color: white;
-            border-radius: 24px 24px 8px 24px;
-            box-shadow: 0 4px 12px rgba(238, 90, 90, 0.2);
-        }
-        .ai .avatar-small {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            margin-right: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
-        }
-        .quick-replies {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 12px;
-        }
-        .quick-reply-btn {
-            padding: 10px 20px;
-            background: white;
-            border: 2px solid #ff6b6b;
-            border-radius: 25px;
-            font-size: 14px;
-            color: #ff6b6b;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .quick-reply-btn:hover {
-            background: rgba(255, 107, 107, 0.05);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.15);
-        }
-        .quick-reply-btn:active { transform: scale(0.96); }
-        .service-card {
-            background: white;
-            border-radius: 20px;
-            padding: 16px;
-            margin-top: 12px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid transparent;
-        }
-        .service-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            border-color: rgba(255, 107, 107, 0.2);
-        }
-        .service-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 10px;
-        }
-        .service-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .service-icon.coffee { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); }
-        .service-icon.umbrella { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
-        .service-icon.taxi { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
-        .service-icon.snack { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .service-icon.music { background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); }
-        .service-content { flex: 1; }
-        .service-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 4px;
-        }
-        .service-desc { font-size: 13px; color: #888; }
-        .service-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #f0f0f0;
-        }
-        .service-price { font-size: 18px; font-weight: 800; color: #ff6b6b; }
-        .service-tag {
-            padding: 4px 12px;
-            background: rgba(255, 107, 107, 0.1);
-            color: #ff6b6b;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .input-area {
-            background: white;
-            padding: 16px;
-            border-top: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .input-field {
-            flex: 1;
-            padding: 12px 20px;
-            background: #f5f7fa;
-            border: none;
-            border-radius: 28px;
-            font-size: 15px;
-            outline: none;
-            transition: all 0.2s;
-        }
-        .input-field:focus { background: #fff; box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2); }
-        .send-btn {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(238, 90, 90, 0.3);
-        }
-        .send-btn:hover { transform: scale(1.1); }
-        .send-btn:active { transform: scale(0.95); }
-        .typing-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 12px 20px;
-            background: white;
-            border-radius: 24px;
-            margin-left: 46px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-        }
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: #999;
-            border-radius: 50%;
-            animation: typing 1.4s infinite ease-in-out both;
-        }
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes typing {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
-        .notification-badge {
-            position: absolute;
-            top: 16px;
-            right: 20px;
-            background: #ff6b6b;
-            color: white;
-            padding: 6px 14px;
-            border-radius: 16px;
-            font-size: 12px;
-            font-weight: 600;
-            animation: pulse 2s infinite;
-            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
-        }
-        .order-success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 20px;
-            margin-top: 12px;
-            border-radius: 20px;
-            text-align: center;
-            animation: slideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .order-success-icon { font-size: 44px; margin-bottom: 12px; }
-        .order-success-title { font-size: 18px; font-weight: 700; }
-        .order-success-desc { font-size: 14px; opacity: 0.9; margin-top: 6px; }
-        .push-notification {
-            position: absolute;
-            top: 60px;
-            left: 20px;
-            right: 20px;
-            background: white;
-            padding: 16px;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-            z-index: 100;
-            animation: slideDown 0.4s ease;
-            display: none;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .push-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-        .push-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #ff6b6b, #ee5a5a); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-        .push-title { font-size: 14px; font-weight: 600; color: #333; }
-        .push-content { font-size: 13px; color: #666; line-height: 1.5; }
-        .push-time { font-size: 11px; color: #999; margin-top: 4px; }
-        .push-close {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 24px;
-            height: 24px;
-            background: #f0f0f0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            cursor: pointer;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; }
+        .app { width: 100%; max-width: 375px; margin: 0 auto; background: #fff; min-height: 100vh; }
+        .status-bar { height: 44px; background: #000; color: white; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; font-size: 14px; }
+        .header { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); color: white; padding: 24px 20px; display: flex; align-items: center; gap: 16px; }
+        .avatar { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .header-info h2 { font-size: 18px; }
+        .header-info p { font-size: 13px; opacity: 0.9; margin-top: 4px; }
+        .chat-container { padding: 20px; height: calc(100vh - 180px); overflow-y: auto; }
+        .message { margin-bottom: 16px; }
+        .message.bot { display: flex; gap: 12px; }
+        .message.bot .msg-content { background: #f0f2f5; border-radius: 0 16px 16px 16px; padding: 12px 16px; max-width: 80%; }
+        .message.user { display: flex; justify-content: flex-end; }
+        .message.user .msg-content { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); color: white; border-radius: 16px 0 16px 16px; padding: 12px 16px; max-width: 80%; }
+        .msg-content p { font-size: 14px; line-height: 1.5; }
+        .msg-time { font-size: 11px; color: #999; margin-top: 4px; text-align: right; }
+        .input-area { padding: 12px 20px; border-top: 1px solid #eee; display: flex; gap: 12px; align-items: center; }
+        .input-area input { flex: 1; padding: 12px 16px; border-radius: 24px; border: 1px solid #ddd; font-size: 14px; }
+        .input-area button { width: 44px; height: 44px; border-radius: 50%; background: #ff6b6b; color: white; border: none; font-size: 18px; cursor: pointer; }
+        .scene-tag { display: inline-block; padding: 4px 12px; background: rgba(255,107,107,0.1); color: #ff6b6b; border-radius: 12px; font-size: 12px; margin-bottom: 8px; }
+        .quick-reply { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        .reply-btn { padding: 8px 16px; background: #f0f4f8; border-radius: 20px; font-size: 13px; cursor: pointer; border: none; color: #555; }
+        .reply-btn:hover { background: #e4e8ec; }
+        .weather-box { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; padding: 16px; border-radius: 16px; margin-bottom: 16px; }
+        .weather-box .title { font-size: 13px; opacity: 0.9; margin-bottom: 8px; }
+        .weather-box .content { font-size: 16px; font-weight: 600; }
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <div class="app">
         <div class="status-bar">
-            <div class="status-left" id="timeDisplay">18:30</div>
-            <div class="status-right">
-                <span>📶</span>
-                <span>📡</span>
-                <span>🔋</span>
-            </div>
+            <span>9:41</span>
+            <span>📶 🔋</span>
         </div>
-
         <div class="header">
             <div class="avatar">🤖</div>
             <div class="header-info">
-                <div class="header-title">瑞幸智能助手</div>
-                <div class="header-subtitle">24小时贴心服务</div>
-            </div>
-            <div class="notification-badge" id="notificationBadge">新消息</div>
-        </div>
-
-        <div class="context-info">
-            <div class="context-item">
-                <span class="icon" id="weatherIcon">☀️</span>
-                <span id="weatherText">晴 26°C</span>
-            </div>
-            <div class="context-item">
-                <span class="icon">📍</span>
-                <span>北京市朝阳区</span>
+                <h2>AI智能关怀助手</h2>
+                <p>已连接 · 在线</p>
             </div>
         </div>
+        <div class="chat-container">
+            <div class="weather-box">
+                <div class="title">📍 当前位置：北京市 · 海淀区</div>
+                <div class="content">🌧️ 小雨 · 22°C · 湿度 78%</div>
+            </div>
+            
+            <div class="message bot">
+                <div class="avatar" style="width:36px;height:36px;font-size:18px;">🤖</div>
+                <div class="msg-content">
+                    <span class="scene-tag">🌧️ 雨天关怀场景</span>
+                    <p>您好！检测到今天北京正在下雨，路上湿滑，请注意安全哦~</p>
+                    <p>雨天容易让人心情低落，要不要来一杯热拿铁暖暖身子？现在下单立享8折优惠！☕</p>
+                    <div class="quick-reply">
+                        <button class="reply-btn">好的，来一杯！</button>
+                        <button class="reply-btn">谢谢关心</button>
+                        <button class="reply-btn">推荐其他饮品</button>
+                    </div>
+                </div>
+            </div>
 
-        <div class="scene-switch">
-            <button class="scene-btn active" onclick="switchScene('overtime')">加班关怀</button>
-            <button class="scene-btn" onclick="switchScene('rainy')">雨天关怀</button>
+            <div class="message user">
+                <div class="msg-content">
+                    <p>好的，来一杯热拿铁！</p>
+                    <div class="msg-time">9:42</div>
+                </div>
+            </div>
+
+            <div class="message bot">
+                <div class="avatar" style="width:36px;height:36px;font-size:18px;">🤖</div>
+                <div class="msg-content">
+                    <p>太棒了！您的热拿铁正在制作中，预计5分钟后可取。</p>
+                    <p>另外，雨天路滑，建议您使用雨伞或雨衣，注意脚下安全~ 🌂</p>
+                </div>
+            </div>
+
+            <div class="message bot">
+                <div class="avatar" style="width:36px;height:36px;font-size:18px;">🤖</div>
+                <div class="msg-content">
+                    <span class="scene-tag">🌙 加班关怀场景</span>
+                    <p>检测到您还在工作，已经晚上9点了哦~</p>
+                    <p>要不要来一杯浓缩咖啡提提神？新推出的深夜陪伴套餐，买一送一！</p>
+                    <div class="quick-reply">
+                        <button class="reply-btn">需要！</button>
+                        <button class="reply-btn">不用了，谢谢</button>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="chat-container" id="chatContainer"></div>
-
         <div class="input-area">
-            <input type="text" class="input-field" id="userInput" placeholder="输入消息..." onkeypress="handleKeyPress(event)">
-            <button class="send-btn" onclick="sendMessage()">➤</button>
-        </div>
-
-        <div class="push-notification" id="pushNotification">
-            <div class="push-close" onclick="closePush()">×</div>
-            <div class="push-header">
-                <div class="push-icon">☕</div>
-                <div class="push-title">瑞幸智能助手</div>
-            </div>
-            <div class="push-content" id="pushContent">加班到这么晚，来杯咖啡提提神吧~</div>
-            <div class="push-time">刚刚</div>
+            <input type="text" placeholder="输入消息..." />
+            <button>➤</button>
         </div>
     </div>
-
-    <script>
-        const overtimeDialogue = [
-            {
-                role: 'ai',
-                content: '嗨，我注意到您今天工作到很晚了，辛苦了！😔',
-                delay: 600
-            },
-            {
-                role: 'ai',
-                content: '加班到这么晚，要不要来一杯提神的咖啡？',
-                delay: 1800,
-                quickReplies: ['好啊，来一杯', '不用了，谢谢']
-            },
-            {
-                role: 'ai',
-                content: '为您推荐加班专属套餐：',
-                delay: 1200,
-                cards: [
-                    { icon: 'coffee', title: '冰美式咖啡', desc: '双倍浓缩，提神醒脑，加班必备', price: '¥15.9', tag: '加班特惠' },
-                    { icon: 'snack', title: '元气小食组合', desc: '曲奇+坚果，补充能量，再战职场', price: '¥12.9', tag: '能量补给' },
-                    { icon: 'music', title: '白噪音放松', desc: '雨声+咖啡研磨声，营造专注氛围', price: '免费', tag: '专属福利' }
-                ]
-            }
-        ];
-
-        const rainyDialogue = [
-            {
-                role: 'ai',
-                content: '外面下雨了，记得带伞哦！☔',
-                delay: 600
-            },
-            {
-                role: 'ai',
-                content: '雨天来一杯热咖啡，温暖整个下午~',
-                delay: 1800,
-                quickReplies: ['好的，来一杯热的', '我带伞了，谢谢']
-            },
-            {
-                role: 'ai',
-                content: '雨天专属暖心推荐：',
-                delay: 1200,
-                cards: [
-                    { icon: 'coffee', title: '热拿铁', desc: '丝滑香浓，温暖身心', price: '¥18.9', tag: '雨天特惠' },
-                    { icon: 'umbrella', title: '瑞幸定制雨伞', desc: '晴雨两用，时尚百搭', price: '¥29.9', tag: '限时抢购' },
-                    { icon: 'taxi', title: '打车优惠券', desc: '雨天出行，省心省力', price: '¥5', tag: '满30可用' }
-                ]
-            }
-        ];
-
-        let currentScene = 'overtime';
-        let dialogueIndex = 0;
-        let isTyping = false;
-
-        function updateTime() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('timeDisplay').textContent = `${hours}:${minutes}`;
-        }
-
-        function switchScene(scene) {
-            currentScene = scene;
-            dialogueIndex = 0;
-            isTyping = false;
-            
-            document.querySelectorAll('.scene-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.scene-btn[onclick="switchScene('${scene}')"]`).classList.add('active');
-            
-            document.getElementById('chatContainer').innerHTML = '';
-            
-            if (scene === 'rainy') {
-                document.getElementById('weatherIcon').textContent = '☔';
-                document.getElementById('weatherText').textContent = '小雨 22°C';
-            } else {
-                document.getElementById('weatherIcon').textContent = '🌙';
-                document.getElementById('weatherText').textContent = '晴 24°C';
-            }
-
-            showPushNotification(scene);
-        }
-
-        function showPushNotification(scene) {
-            const push = document.getElementById('pushNotification');
-            const content = scene === 'overtime' 
-                ? '加班到这么晚，来杯咖啡提提神吧~' 
-                : '外面下雨了，来杯热咖啡暖暖身吧~';
-            
-            document.getElementById('pushContent').textContent = content;
-            push.style.display = 'block';
-            
-            setTimeout(() => {
-                push.style.display = 'none';
-                startDialogue();
-            }, 3000);
-        }
-
-        function closePush() {
-            document.getElementById('pushNotification').style.display = 'none';
-            startDialogue();
-        }
-
-        function startDialogue() {
-            const dialogue = currentScene === 'overtime' ? overtimeDialogue : rainyDialogue;
-            
-            function processNext() {
-                if (dialogueIndex < dialogue.length && !isTyping) {
-                    isTyping = true;
-                    const message = dialogue[dialogueIndex];
-                    
-                    setTimeout(() => {
-                        addMessage('ai', message);
-                        isTyping = false;
-                        dialogueIndex++;
-                        processNext();
-                    }, message.delay);
-                }
-            }
-            
-            processNext();
-        }
-
-        function addMessage(role, data) {
-            const chatContainer = document.getElementById('chatContainer');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${role}`;
-            
-            let content = '';
-            
-            if (role === 'ai') {
-                content = `
-                    <div class="avatar-small">🤖</div>
-                    <div>
-                        <div class="message-bubble">${data.content}</div>
-                        ${data.quickReplies ? renderQuickReplies(data.quickReplies) : ''}
-                        ${data.cards ? renderCards(data.cards) : ''}
-                    </div>
-                `;
-            } else {
-                content = `<div class="message-bubble">${data.content}</div>`;
-            }
-            
-            messageDiv.innerHTML = content;
-            chatContainer.appendChild(messageDiv);
-            
-            setTimeout(() => {
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }, 100);
-            
-            if (role === 'ai' && data.cards) {
-                data.cards.forEach((card, index) => {
-                    const cardElement = messageDiv.querySelectorAll('.service-card')[index];
-                    cardElement.addEventListener('click', () => handleCardClick(card));
-                });
-            }
-        }
-
-        function renderQuickReplies(replies) {
-            return `
-                <div class="quick-replies">
-                    ${replies.map(reply => `<button class="quick-reply-btn" onclick="handleQuickReply('${reply}')">${reply}</button>`).join('')}
-                </div>
-            `;
-        }
-
-        function renderCards(cards) {
-            return `
-                <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 12px;">
-                    ${cards.map(card => `
-                        <div class="service-card">
-                            <div class="service-header">
-                                <div class="service-icon ${card.icon}">${getIconEmoji(card.icon)}</div>
-                                <div class="service-content">
-                                    <div class="service-title">${card.title}</div>
-                                    <div class="service-desc">${card.desc}</div>
-                                </div>
-                            </div>
-                            <div class="service-footer">
-                                <div class="service-tag">${card.tag}</div>
-                                <div class="service-price">${card.price}</div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        function getIconEmoji(icon) {
-            const icons = { coffee: '☕', umbrella: '☂️', taxi: '🚕', snack: '🍪', music: '🎵' };
-            return icons[icon] || '📦';
-        }
-
-        function handleQuickReply(reply) {
-            addMessage('user', { content: reply });
-            
-            setTimeout(() => {
-                if (reply.includes('好') || reply.includes('来')) {
-                    addMessage('ai', { content: '太棒了！正在为您准备订单...', delay: 500 });
-                    setTimeout(() => {
-                        const chatContainer = document.getElementById('chatContainer');
-                        const successDiv = document.createElement('div');
-                        successDiv.className = 'order-success';
-                        successDiv.innerHTML = `
-                            <div class="order-success-icon">🎉</div>
-                            <div class="order-success-title">下单成功!</div>
-                            <div class="order-success-desc">预计5分钟后可取</div>
-                        `;
-                        chatContainer.appendChild(successDiv);
-                        chatContainer.scrollTop = chatContainer.scrollHeight;
-                    }, 1500);
-                } else {
-                    addMessage('ai', { content: '好的，注意休息哦！有需要随时找我~', delay: 500 });
-                }
-            }, 800);
-        }
-
-        function handleCardClick(card) {
-            addMessage('user', { content: `我想要${card.title}` });
-            
-            setTimeout(() => {
-                addMessage('ai', { content: `好的，${card.title}已加入购物车！`, delay: 500 });
-                setTimeout(() => {
-                    const chatContainer = document.getElementById('chatContainer');
-                    const successDiv = document.createElement('div');
-                    successDiv.className = 'order-success';
-                    successDiv.innerHTML = `
-                        <div class="order-success-icon">🎉</div>
-                        <div class="order-success-title">下单成功!</div>
-                        <div class="order-success-desc">${card.title} 预计5分钟后可取</div>
-                    `;
-                    chatContainer.appendChild(successDiv);
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
-                }, 1000);
-            }, 500);
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('userInput');
-            const content = input.value.trim();
-            if (!content) return;
-            
-            addMessage('user', { content });
-            input.value = '';
-            
-            setTimeout(() => {
-                addMessage('ai', { content: '收到！我会尽快为您处理~', delay: 500 });
-            }, 800);
-        }
-
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') sendMessage();
-        }
-
-        window.onload = function() {
-            updateTime();
-            setInterval(updateTime, 60000);
-            
-            setTimeout(() => {
-                document.getElementById('notificationBadge').style.display = 'none';
-                showPushNotification('overtime');
-            }, 1200);
-        };
-    </script>
 </body>
 </html>

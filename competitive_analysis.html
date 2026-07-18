@@ -3,856 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI未来人才大赛 - 竞品分析报告</title>
+    <title>竞品分析报告 - AI未来人才大赛</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
-            padding: 40px 20px;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .header {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-            color: white;
-            padding: 48px;
-            border-radius: 24px;
-            text-align: center;
-            margin-bottom: 32px;
-            box-shadow: 0 10px 40px rgba(255, 107, 107, 0.3);
-        }
-        .header h1 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
-        }
-        .header p {
-            opacity: 0.9;
-            font-size: 16px;
-            font-weight: 300;
-        }
-        .brand-section {
-            background: white;
-            border-radius: 20px;
-            padding: 28px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-        .brand-section:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-        }
-        .brand-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-        .brand-logo {
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        .brand-logo.starbucks { background: linear-gradient(135deg, #006241 0%, #003823 100%); }
-        .brand-logo.cotti { background: linear-gradient(135deg, #e53935 0%, #b71c1c 100%); }
-        .brand-logo.manner { background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%); }
-        .brand-info h3 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 6px;
-        }
-        .brand-info p {
-            font-size: 14px;
-            color: #999;
-        }
-        .brand-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 12px;
-        }
-        .brand-tag {
-            padding: 6px 14px;
-            background: #f0f0f0;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #666;
-            transition: all 0.2s ease;
-        }
-        .brand-tag:hover {
-            background: #e5e7eb;
-            transform: scale(1.05);
-        }
-        .analysis-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-top: 20px;
-        }
-        .analysis-item {
-            background: #f8f9fa;
-            border-radius: 14px;
-            padding: 20px;
-            border-left: 4px solid;
-            transition: all 0.3s ease;
-        }
-        .analysis-item:hover {
-            background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        .analysis-item.starbucks-item { border-color: #006241; }
-        .analysis-item.cotti-item { border-color: #e53935; }
-        .analysis-item.manner-item { border-color: #2c3e50; }
-        .analysis-item h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .analysis-item p {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.7;
-        }
-        .swot-section {
-            background: white;
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            margin-bottom: 24px;
-        }
-        .swot-section h2 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .swot-section h2::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: #ff6b6b;
-            border-radius: 2px;
-        }
-        .swot-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        .swot-card {
-            border-radius: 16px;
-            padding: 24px;
-            min-height: 200px;
-        }
-        .swot-card.strengths { 
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(5, 150, 105, 0.08) 100%);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-        .swot-card.weaknesses { 
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.08) 100%);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-        }
-        .swot-card.opportunities { 
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.08) 100%);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-        .swot-card.threats { 
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.08) 100%);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-        }
-        .swot-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .swot-card.strengths .swot-title { color: #059669; }
-        .swot-card.weaknesses .swot-title { color: #dc2626; }
-        .swot-card.opportunities .swot-title { color: #2563eb; }
-        .swot-card.threats .swot-title { color: #d97706; }
-        .swot-list {
-            list-style: none;
-        }
-        .swot-list li {
-            font-size: 13px;
-            color: #666;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            position: relative;
-            padding-left: 20px;
-            line-height: 1.6;
-        }
-        .swot-list li:last-child { border-bottom: none; }
-        .swot-list li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .swot-card.strengths .swot-list li::before { color: #10b981; }
-        .swot-card.weaknesses .swot-list li::before { color: #ef4444; }
-        .swot-card.opportunities .swot-list li::before { color: #3b82f6; }
-        .swot-card.threats .swot-list li::before { color: #f59e0b; }
-        .positioning-section {
-            background: white;
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            margin-bottom: 24px;
-        }
-        .positioning-section h2 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .positioning-section h2::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: #ff6b6b;
-            border-radius: 2px;
-        }
-        .positioning-chart {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            background: #f8f9fa;
-            border-radius: 16px;
-            padding: 40px;
-        }
-        .axis {
-            position: absolute;
-            background: #d1d5db;
-        }
-        .axis.x {
-            bottom: 40px;
-            left: 80px;
-            right: 40px;
-            height: 2px;
-        }
-        .axis.y {
-            left: 80px;
-            top: 40px;
-            bottom: 40px;
-            width: 2px;
-        }
-        .axis-label {
-            position: absolute;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-        }
-        .axis-label.x-right {
-            right: 40px;
-            bottom: 10px;
-        }
-        .axis-label.x-left {
-            left: 80px;
-            bottom: 10px;
-        }
-        .axis-label.y-top {
-            left: 10px;
-            top: 40px;
-            transform: rotate(-90deg);
-            transform-origin: left center;
-        }
-        .axis-label.y-bottom {
-            left: 10px;
-            bottom: 40px;
-            transform: rotate(-90deg);
-            transform-origin: left center;
-        }
-        .positioning-dot {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        .positioning-dot:hover {
-            transform: scale(1.3);
-            z-index: 10;
-        }
-        .positioning-dot.starbucks {
-            background: linear-gradient(135deg, #006241 0%, #003823 100%);
-            left: 75%;
-            top: 30%;
-        }
-        .positioning-dot.cotti {
-            background: linear-gradient(135deg, #e53935 0%, #b71c1c 100%);
-            left: 25%;
-            top: 70%;
-        }
-        .positioning-dot.manner {
-            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
-            left: 55%;
-            top: 50%;
-        }
-        .positioning-dot.ours {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-            left: 60%;
-            top: 35%;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 107, 107, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
-        }
-        .positioning-label {
-            position: absolute;
-            font-size: 12px;
-            font-weight: 500;
-            color: #666;
-            white-space: nowrap;
-            padding: 4px 8px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            margin-top: 8px;
-            margin-left: -20px;
-        }
-        .comparison-section {
-            background: white;
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            margin-bottom: 24px;
-        }
-        .comparison-section h2 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .comparison-section h2::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: #ff6b6b;
-            border-radius: 2px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th {
-            background: #f8f9fa;
-            padding: 16px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 13px;
-            color: #666;
-            border-bottom: 2px solid #e5e7eb;
-        }
-        td {
-            padding: 16px;
-            font-size: 14px;
-            color: #333;
-            border-bottom: 1px solid #f0f0f0;
-            vertical-align: top;
-        }
-        tr:hover td {
-            background: #fafafa;
-        }
-        .starbucks-cell { color: #006241; font-weight: 500; }
-        .cotti-cell { color: #e53935; font-weight: 500; }
-        .manner-cell { color: #2c3e50; font-weight: 500; }
-        .diff-advantage {
-            background: rgba(16, 185, 129, 0.08);
-            color: #059669;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-weight: 500;
-            display: inline-block;
-        }
-        .advantage-section {
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.05) 0%, rgba(238, 90, 90, 0.05) 100%);
-            border-radius: 20px;
-            padding: 32px;
-            border: 1px solid rgba(255, 107, 107, 0.2);
-            margin-bottom: 24px;
-        }
-        .advantage-section h2 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #ff6b6b;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .advantage-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-        .advantage-item {
-            display: flex;
-            gap: 14px;
-            background: white;
-            padding: 20px;
-            border-radius: 14px;
-            transition: all 0.3s ease;
-        }
-        .advantage-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        }
-        .advantage-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-            color: white;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-        .advantage-content h4 {
-            font-size: 15px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 6px;
-        }
-        .advantage-content p {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.6;
-        }
-        .strategy-summary {
-            background: white;
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            margin-bottom: 24px;
-        }
-        .strategy-summary h2 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .strategy-summary h2::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: #ff6b6b;
-            border-radius: 2px;
-        }
-        .strategy-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-        .strategy-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #f0f0f0 100%);
-            border-radius: 16px;
-            padding: 24px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        .strategy-card:hover {
-            background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        .strategy-card .number {
-            font-size: 36px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 12px;
-        }
-        .strategy-card h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-        .strategy-card p {
-            font-size: 12px;
-            color: #666;
-            line-height: 1.6;
-        }
-        .footer {
-            text-align: center;
-            padding: 28px;
-            color: #999;
-            font-size: 13px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; }
+        .header { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); color: white; padding: 60px 20px; text-align: center; }
+        .header h1 { font-size: 36px; margin-bottom: 12px; }
+        .header p { font-size: 16px; opacity: 0.9; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        .section { background: white; border-radius: 20px; padding: 32px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .section h2 { font-size: 22px; color: #333; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #8b5cf6; }
+        .competitor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .competitor-card { padding: 24px; border-radius: 16px; text-align: center; }
+        .competitor-card.starbucks { background: linear-gradient(135deg, #2d2926 0%, #4a4440 100%); color: white; }
+        .competitor-card.cotti { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); color: white; }
+        .competitor-card.manner { background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: white; }
+        .competitor-card h3 { font-size: 18px; margin-bottom: 12px; }
+        .competitor-card .desc { font-size: 13px; opacity: 0.9; margin-bottom: 16px; }
+        .competitor-card .tag { display: inline-block; padding: 4px 12px; background: rgba(255,255,255,0.2); border-radius: 12px; font-size: 12px; margin: 4px; }
+        .swot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .swot-box { padding: 20px; border-radius: 12px; }
+        .swot-box.strengths { background: #dcfce7; border-left: 4px solid #22c55e; }
+        .swot-box.weaknesses { background: #fee2e2; border-left: 4px solid #ef4444; }
+        .swot-box.opportunities { background: #dbeafe; border-left: 4px solid #3b82f6; }
+        .swot-box.threats { background: #fef3c7; border-left: 4px solid #f59e0b; }
+        .swot-box h4 { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+        .swot-box ul { list-style: none; padding: 0; }
+        .swot-box li { font-size: 13px; padding: 6px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); }
+        .positioning-map { height: 300px; background: #f8fafc; border-radius: 16px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .map-point { position: absolute; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 12px; }
+        .map-point.starbucks { background: #2d2926; top: 40px; left: 15%; }
+        .map-point.cotti { background: #ff6b6b; bottom: 40px; right: 15%; }
+        .map-point.manner { background: #1a1a1a; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .map-point.our { background: #8b5cf6; bottom: 40px; left: 15%; box-shadow: 0 0 0 8px rgba(139,92,246,0.2); }
+        .axis-label { position: absolute; font-size: 12px; color: #666; }
+        .axis-label.x-left { bottom: 10px; left: 10px; }
+        .axis-label.x-right { bottom: 10px; right: 10px; }
+        .axis-label.y-top { top: 10px; right: 10px; }
+        .axis-label.y-bottom { bottom: 10px; right: 10px; }
     </style>
 </head>
 <body>
+    <div class="header">
+        <h1>⚔️ 竞品分析报告</h1>
+        <p>深度拆解星巴克、库迪、Manner三大品牌策略</p>
+    </div>
     <div class="container">
-        <div class="header">
-            <h1>咖啡品牌用户运营方式竞品分析</h1>
-            <p>横向对比星巴克、库迪、Manner的核心运营策略 | 深度分析市场机会与竞争定位</p>
-        </div>
-
-        <div class="brand-section">
-            <div class="brand-header">
-                <div class="brand-logo starbucks">☕</div>
-                <div class="brand-info">
-                    <h3>星巴克 (Starbucks)</h3>
-                    <p>全球咖啡连锁巨头，主打第三空间体验</p>
-                </div>
-            </div>
-            <div class="brand-tags">
-                <div class="brand-tag">高端定位</div>
-                <div class="brand-tag">会员体系完善</div>
-                <div class="brand-tag">第三空间</div>
-                <div class="brand-tag">社交属性</div>
-            </div>
-            <div class="analysis-grid">
-                <div class="analysis-item starbucks-item">
-                    <h4>推送机制</h4>
-                    <p>基于用户消费习惯和偏好的个性化推送，节日营销内容丰富，新品上市前会有预热推送。</p>
-                </div>
-                <div class="analysis-item starbucks-item">
-                    <h4>会员体系</h4>
-                    <p>星享卡体系，积分制+等级特权（银/金/玉/黑），生日礼遇、免费饮品券、专属活动等。</p>
-                </div>
-                <div class="analysis-item starbucks-item">
-                    <h4>APP交互</h4>
-                    <p>功能全面，支持点单、支付、积分查询、门店导航，UI设计精致但操作略显复杂。</p>
-                </div>
-                <div class="analysis-item starbucks-item">
-                    <h4>运营策略</h4>
-                    <p>注重品牌故事和情感营销，季节限定饮品，跨界联名合作，线下体验活动丰富。</p>
-                </div>
+        <div class="section">
+            <h2>🏢 竞品概览</h2>
+            <div class="competitor-grid">
+                <div class="competitor-card starbucks"><h3>星巴克</h3><div class="desc">高端咖啡市场领导者</div><span class="tag">品牌溢价</span><span class="tag">第三空间</span><span class="tag">会员体系</span></div>
+                <div class="competitor-card cotti"><h3>库迪咖啡</h3><div class="desc">性价比之王</div><span class="tag">低价策略</span><span class="tag">快速扩张</span><span class="tag">联名营销</span></div>
+                <div class="competitor-card manner"><h3>Manner</h3><div class="desc">精品咖啡代表</div><span class="tag">品质优先</span><span class="tag">小而美</span><span class="tag">自提模式</span></div>
             </div>
         </div>
 
-        <div class="brand-section">
-            <div class="brand-header">
-                <div class="brand-logo cotti">☕</div>
-                <div class="brand-info">
-                    <h3>库迪咖啡 (Cotti Coffee)</h3>
-                    <p>高性价比咖啡品牌，主打低价策略快速扩张</p>
-                </div>
-            </div>
-            <div class="brand-tags">
-                <div class="brand-tag">极致性价比</div>
-                <div class="brand-tag">快速扩张</div>
-                <div class="brand-tag">低价策略</div>
-                <div class="brand-tag">加盟模式</div>
-            </div>
-            <div class="analysis-grid">
-                <div class="analysis-item cotti-item">
-                    <h4>推送机制</h4>
-                    <p>高频次促销推送，以优惠券和折扣为主，缺乏个性化，主要依赖价格吸引用户。</p>
-                </div>
-                <div class="analysis-item cotti-item">
-                    <h4>会员体系</h4>
-                    <p>简单的积分兑换体系，会员权益较少，主要以低价商品吸引复购。</p>
-                </div>
-                <div class="analysis-item cotti-item">
-                    <h4>APP交互</h4>
-                    <p>简洁实用，重点突出优惠券和特价商品，操作流程简单但功能相对单一。</p>
-                </div>
-                <div class="analysis-item cotti-item">
-                    <h4>运营策略</h4>
-                    <p>低价渗透策略，通过大量优惠券培养用户习惯，快速开店抢占市场份额。</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="brand-section">
-            <div class="brand-header">
-                <div class="brand-logo manner">☕</div>
-                <div class="brand-info">
-                    <h3>Manner Coffee</h3>
-                    <p>精品咖啡品牌，主打高品质咖啡和极简体验</p>
-                </div>
-            </div>
-            <div class="brand-tags">
-                <div class="brand-tag">精品咖啡</div>
-                <div class="brand-tag">极简体验</div>
-                <div class="brand-tag">外带为主</div>
-                <div class="brand-tag">咖啡师文化</div>
-            </div>
-            <div class="analysis-grid">
-                <div class="analysis-item manner-item">
-                    <h4>推送机制</h4>
-                    <p>内容较少，以新品上架和门店活动为主，注重品质传达而非促销信息。</p>
-                </div>
-                <div class="analysis-item manner-item">
-                    <h4>会员体系</h4>
-                    <p>积分制会员，积累积分可兑换饮品，会员权益相对基础，主打产品品质吸引。</p>
-                </div>
-                <div class="analysis-item manner-item">
-                    <h4>APP交互</h4>
-                    <p>极简设计风格，操作便捷，重点在点单流程优化，视觉风格统一有调性。</p>
-                </div>
-                <div class="analysis-item manner-item">
-                    <h4>运营策略</h4>
-                    <p>专注咖啡品质，小而美门店模式，注重咖啡师培养，社群运营和口碑传播。</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="swot-section">
-            <h2>本方案 SWOT 分析</h2>
+        <div class="section">
+            <h2>📊 SWOT分析矩阵</h2>
             <div class="swot-grid">
-                <div class="swot-card strengths">
-                    <div class="swot-title">🛡️ 优势 (Strengths)</div>
-                    <ul class="swot-list">
-                        <li>AI情景感知推送技术领先，实时响应场景变化</li>
-                        <li>对话式交互降低用户使用门槛，提升体验</li>
-                        <li>情感化关怀服务增强品牌情感连接</li>
-                        <li>数据驱动的个性化推荐，精准度高</li>
-                        <li>事件驱动架构确保推送时效性</li>
-                    </ul>
-                </div>
-                <div class="swot-card weaknesses">
-                    <div class="swot-title">⚠️ 劣势 (Weaknesses)</div>
-                    <ul class="swot-list">
-                        <li>技术复杂度高，开发和维护成本相对较高</li>
-                        <li>依赖外部数据API（天气、位置等）</li>
-                        <li>AI模型需要持续训练优化</li>
-                        <li>用户隐私数据处理需符合监管要求</li>
-                    </ul>
-                </div>
-                <div class="swot-card opportunities">
-                    <div class="swot-title">📈 机会 (Opportunities)</div>
-                    <ul class="swot-list">
-                        <li>用户对个性化服务需求持续增长</li>
-                        <li>AI技术成本持续下降，落地门槛降低</li>
-                        <li>移动端场景化服务市场空白</li>
-                        <li>年轻用户追求情感价值和体验</li>
-                        <li>咖啡市场竞争激烈，差异化需求强烈</li>
-                    </ul>
-                </div>
-                <div class="swot-card threats">
-                    <div class="swot-title">🚨 威胁 (Threats)</div>
-                    <ul class="swot-list">
-                        <li>大型品牌可能跟进类似功能</li>
-                        <li>用户对推送消息疲劳感增加</li>
-                        <li>隐私保护法规日趋严格</li>
-                        <li>技术迭代速度快，需要持续创新</li>
-                    </ul>
-                </div>
+                <div class="swot-box strengths"><h4>✅ 优势 (Strengths)</h4><ul><li>AI情景感知技术领先</li><li>个性化推荐算法精准</li><li>情感化交互体验独特</li><li>数据驱动决策体系完善</li></ul></div>
+                <div class="swot-box weaknesses"><h4>❌ 劣势 (Weaknesses)</h4><ul><li>品牌认知度较低</li><li>线下门店覆盖不足</li><li>资金实力相对有限</li><li>供应链整合能力较弱</li></ul></div>
+                <div class="swot-box opportunities"><h4>📈 机会 (Opportunities)</h4><ul><li>消费升级趋势明显</li><li>AI技术应用普及</li><li>用户对个性化需求增加</li><li>咖啡市场持续增长</li></ul></div>
+                <div class="swot-box threats"><h4>⚠️ 威胁 (Threats)</h4><ul><li>巨头品牌竞争激烈</li><li>价格战压力</li><li>技术壁垒易被复制</li><li>政策监管变化</li></ul></div>
             </div>
         </div>
 
-        <div class="positioning-section">
-            <h2>战略定位图</h2>
-            <p style="font-size: 14px; color: #666; margin-bottom: 20px;">基于"用户体验深度"和"价格敏感度"两个维度，展示各品牌的市场定位</p>
-            <div class="positioning-chart">
-                <div class="axis x"></div>
-                <div class="axis y"></div>
+        <div class="section">
+            <h2>🎯 战略定位图</h2>
+            <div class="positioning-map">
                 <div class="axis-label x-left">价格敏感</div>
-                <div class="axis-label x-right">品质敏感</div>
-                <div class="axis-label y-bottom">标准化服务</div>
-                <div class="axis-label y-top">个性化体验</div>
-                
-                <div class="positioning-dot starbucks" title="星巴克">星</div>
-                <div class="positioning-label" style="left: 72%; top: 36%;">星巴克</div>
-                
-                <div class="positioning-dot cotti" title="库迪咖啡">库</div>
-                <div class="positioning-label" style="left: 22%; top: 76%;">库迪咖啡</div>
-                
-                <div class="positioning-dot manner" title="Manner">M</div>
-                <div class="positioning-label" style="left: 52%; top: 56%;">Manner</div>
-                
-                <div class="positioning-dot ours" title="AI智能关怀">AI</div>
-                <div class="positioning-label" style="left: 57%; top: 41%;">AI智能关怀</div>
-            </div>
-            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 32px;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 16px; height: 16px; border-radius: 50%; background: #006241;"></div>
-                    <span style="font-size: 12px; color: #666;">星巴克 - 高端体验</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 16px; height: 16px; border-radius: 50%; background: #e53935;"></div>
-                    <span style="font-size: 12px; color: #666;">库迪 - 极致低价</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 16px; height: 16px; border-radius: 50%; background: #2c3e50;"></div>
-                    <span style="font-size: 12px; color: #666;">Manner - 精品咖啡</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 16px; height: 16px; border-radius: 50%; background: #ff6b6b; animation: pulse 2s infinite;"></div>
-                    <span style="font-size: 12px; color: #666;">本方案 - 智能关怀</span>
-                </div>
+                <div class="axis-label x-right">价格不敏感</div>
+                <div class="axis-label y-top">体验深度高</div>
+                <div class="axis-label y-bottom" style="bottom:20px;">体验深度低</div>
+                <div class="map-point starbucks">星巴克</div>
+                <div class="map-point cotti">库迪</div>
+                <div class="map-point manner">Manner</div>
+                <div class="map-point our">AI关怀</div>
             </div>
         </div>
 
-        <div class="comparison-section">
-            <h2>横向对比表格</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>对比维度</th>
-                        <th>星巴克</th>
-                        <th>库迪咖啡</th>
-                        <th>Manner</th>
-                        <th>本方案优势</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>推送机制</strong></td>
-                        <td class="starbucks-cell">基于消费习惯的个性化推送，节日营销丰富</td>
-                        <td class="cotti-cell">高频次促销推送，以优惠券为主，缺乏个性化</td>
-                        <td class="manner-cell">内容较少，以新品和活动为主</td>
-                        <td class="diff-advantage">AI情景感知推送，根据用户实时状态主动关怀</td>
-                    </tr>
-                    <tr>
-                        <td><strong>会员体系设计</strong></td>
-                        <td class="starbucks-cell">四级会员体系，权益丰富但升级门槛高</td>
-                        <td class="cotti-cell">简单积分制，权益较少，依赖低价</td>
-                        <td class="manner-cell">基础积分兑换，主打品质吸引</td>
-                        <td class="diff-advantage">情景化会员权益，根据场景提供专属福利</td>
-                    </tr>
-                    <tr>
-                        <td><strong>APP交互特点</strong></td>
-                        <td class="starbucks-cell">功能全面，UI精致但操作复杂</td>
-                        <td class="cotti-cell">简洁实用，重点突出优惠，功能单一</td>
-                        <td class="manner-cell">极简设计，操作便捷，视觉统一</td>
-                        <td class="diff-advantage">AI智能对话交互，自然语言操作，降低使用门槛</td>
-                    </tr>
-                    <tr>
-                        <td><strong>情感连接</strong></td>
-                        <td class="starbucks-cell">品牌故事营销，注重情感共鸣</td>
-                        <td class="cotti-cell">缺乏情感连接，主打价格优势</td>
-                        <td class="manner-cell">咖啡师文化，社群运营</td>
-                        <td class="diff-advantage">主动关怀式服务，让用户感受到被"读懂"</td>
-                    </tr>
-                    <tr>
-                        <td><strong>场景化服务</strong></td>
-                        <td class="starbucks-cell">季节限定产品，线下体验活动</td>
-                        <td class="cotti-cell">无明显场景化服务</td>
-                        <td class="manner-cell">精品咖啡场景，外带体验</td>
-                        <td class="diff-advantage">多情景感知（加班、天气、节日等），提供即时关怀服务</td>
-                    </tr>
-                    <tr>
-                        <td><strong>运营策略重点</strong></td>
-                        <td class="starbucks-cell">品牌溢价，第三空间体验</td>
-                        <td class="cotti-cell">低价渗透，快速扩张</td>
-                        <td class="manner-cell">品质驱动，口碑传播</td>
-                        <td class="diff-advantage">AI驱动的智能关怀，提升用户粘性和品牌好感</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="advantage-section">
-            <h2>本方案差异化竞争优势</h2>
-            <div class="advantage-list">
-                <div class="advantage-item">
-                    <div class="advantage-icon">🎯</div>
-                    <div class="advantage-content">
-                        <h4>情景感知智能推送</h4>
-                        <p>不同于传统的基于历史数据的推送，本方案能够实时感知用户场景（加班、天气变化），提供主动、及时的关怀服务，大幅提升推送打开率和转化率。</p>
-                    </div>
-                </div>
-                <div class="advantage-item">
-                    <div class="advantage-icon">🤖</div>
-                    <div class="advantage-content">
-                        <h4>AI对话式交互</h4>
-                        <p>采用自然语言对话方式，用户无需学习复杂操作流程，通过简单对话即可完成点单，降低使用门槛，提升交互体验。</p>
-                    </div>
-                </div>
-                <div class="advantage-item">
-                    <div class="advantage-icon">❤️</div>
-                    <div class="advantage-content">
-                        <h4>情感化关怀服务</h4>
-                        <p>超越简单的商品推荐，提供情感层面的关怀（如加班问候、雨天提醒），增强用户与品牌的情感连接，提升品牌忠诚度。</p>
-                    </div>
-                </div>
-                <div class="advantage-item">
-                    <div class="advantage-icon">📊</div>
-                    <div class="advantage-content">
-                        <h4>数据驱动的个性化</h4>
-                        <p>结合用户画像和实时场景数据，提供精准的个性化推荐，避免同质化内容，提升用户体验和商业效果。</p>
-                    </div>
-                </div>
-                <div class="advantage-item">
-                    <div class="advantage-icon">⚡</div>
-                    <div class="advantage-content">
-                        <h4>即时响应能力</h4>
-                        <p>基于事件触发的推送机制，能够在用户需要的时刻及时提供服务，相比定时推送更具时效性和价值感。</p>
-                    </div>
-                </div>
-                <div class="advantage-item">
-                    <div class="advantage-icon">🔄</div>
-                    <div class="advantage-content">
-                        <h4>持续学习优化</h4>
-                        <p>AI模型通过用户反馈持续学习优化，推送策略和内容质量随时间不断提升，形成正向循环。</p>
-                    </div>
-                </div>
+        <div class="section">
+            <h2>🎯 差异化竞争策略</h2>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+                <div style="padding:20px;background:#f0fdf4;border-radius:12px;"><h4 style="color:#16a34a;">差异化定位</h4><p style="font-size:13px;color:#666;margin-top:8px;">从"卖咖啡"转向"卖关怀"，通过AI情景感知提供情感化服务</p></div>
+                <div style="padding:20px;background:#fef3c7;border-radius:12px;"><h4 style="color:#d97706;">精准推荐</h4><p style="font-size:13px;color:#666;margin-top:8px;">基于多维度情景分析，提供个性化饮品推荐</p></div>
+                <div style="padding:20px;background:#dbeafe;border-radius:12px;"><h4 style="color:#2563eb;">智能交互</h4><p style="font-size:13px;color:#666;margin-top:8px;">自然语言对话，打造有温度的AI助手形象</p></div>
             </div>
-        </div>
-
-        <div class="strategy-summary">
-            <h2>竞争策略总结</h2>
-            <div class="strategy-cards">
-                <div class="strategy-card">
-                    <div class="number">1</div>
-                    <h4>差异化定位</h4>
-                    <p>避开价格战和高端体验的红海，专注"智能关怀"细分领域，打造独特的情感连接价值</p>
-                </div>
-                <div class="strategy-card">
-                    <div class="number">2</div>
-                    <h4>技术壁垒构建</h4>
-                    <p>通过AI情景感知和对话交互技术构建竞争壁垒，形成难以复制的核心能力</p>
-                </div>
-                <div class="strategy-card">
-                    <div class="number">3</div>
-                    <h4>用户体验优先</h4>
-                    <p>以用户体验为核心，通过场景化服务提升用户粘性和品牌好感度</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>分析周期：2026年7月 | 数据来源：公开资料及用户调研</p>
-            <p style="margin-top: 8px;">本分析仅供参考，具体市场策略需结合实际数据验证</p>
         </div>
     </div>
 </body>

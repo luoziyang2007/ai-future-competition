@@ -1,18 +1,23 @@
-<textarea style="width: 100%; height: 300px; font-family: monospace; font-size: 12px;" readonly> <meta charSet="UTF-8"/> <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <title>AI智能关怀助手 - AI未来人才大赛参赛方案</title>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智能关怀助手 - AI未来人才大赛参赛方案</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: #f5f7fa; min-height: 100vh; }
-        .hero-section { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); padding: 80px 20px; text-align: center; color: white; position: relative; overflow: hidden; }
-        .hero-section h1 { font-size: 42px; font-weight: 800; margin-bottom: 16px; }
-        .hero-section .subtitle { font-size: 18px; opacity: 0.95; max-width: 600px; margin: 0 auto 32px; line-height: 1.6; }
-        .stats-row { display: flex; justify-content: center; gap: 40px; margin-top: 40px; }
-        .stat-item { text-align: center; padding: 24px; background: rgba(255,255,255,0.1); border-radius: 20px; min-width: 140px; }
-        .stat-item .value { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
-        .stat-item .label { font-size: 13px; opacity: 0.9; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; min-height: 100vh; }
+        .hero { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); padding: 80px 20px; text-align: center; color: white; }
+        .hero h1 { font-size: 42px; font-weight: 800; margin-bottom: 16px; }
+        .hero .subtitle { font-size: 18px; opacity: 0.9; max-width: 600px; margin: 0 auto 32px; line-height: 1.6; }
+        .stats { display: flex; justify-content: center; gap: 40px; margin-top: 40px; }
+        .stat { text-align: center; padding: 24px; background: rgba(255,255,255,0.1); border-radius: 20px; min-width: 140px; }
+        .stat .value { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
+        .stat .label { font-size: 13px; opacity: 0.9; }
         .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
         .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
-        .card { background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.08); cursor: pointer; }
-        .card:hover { transform: translateY(-12px); box-shadow: 0 20px 50px rgba(0,0,0,0.15); }
+        .card { background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.3s; }
+        .card:hover { transform: translateY(-8px); }
         .card-header { height: 160px; display: flex; align-items: center; justify-content: center; font-size: 56px; }
         .card-header.demo { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .card-header.data { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
@@ -23,80 +28,39 @@
         .card-header.video { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
         .card-body { padding: 28px; }
         .card-body h3 { font-size: 19px; font-weight: 700; color: #333; margin-bottom: 12px; }
-        .card-body p { font-size: 14px; color: #666; line-height: 1.6; }
-        .card-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-        .card-tag { padding: 6px 14px; background: #f0f4f8; border-radius: 16px; font-size: 12px; color: #555; }
-        .card-tag.highlight { background: rgba(255,107,107,0.1); color: #ff6b6b; }
+        .card-body p { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 16px; }
+        .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 6px 14px; background: #f0f4f8; border-radius: 16px; font-size: 12px; color: #555; }
+        .tag.highlight { background: rgba(255,107,107,0.1); color: #ff6b6b; }
+        .footer { background: #333; color: #999; padding: 32px; text-align: center; font-size: 13px; margin-top: 60px; }
+        .section-title { font-size: 28px; font-weight: 700; color: #333; text-align: center; margin-bottom: 12px; }
+        .section-desc { font-size: 15px; color: #666; text-align: center; margin-bottom: 48px; max-width: 600px; margin-left: auto; margin-right: auto; }
     </style>
-# AI智能关怀助手
-基于情景感知的智能咖啡服务推荐系统
- 让每一次推送都充满温度
-
-3.2x
-
-打开意愿提升
-
-68%
-
-点击转化率
-
-4.6/5
-
-用户好感度
-
-P<0.05
-
-统计显著性
-
-## 参赛材料
-点击下方卡片查看各模块详细内容
-
-💬
-
-### 可交互Demo原型
-模拟AI agent对话界面，展示加班关怀和雨天关怀场景
-
-核心亮点 情景感知
-
-📊
-
-### 数据报告
-基于30人实验组A/B测试的详细数据分析
-
-数据支撑 A/B测试
-
-👥
-
-### 用户画像分析
-基于用户深度访谈的核心洞察和需求痛点
-
-用户研究 深度访谈
-
-💰
-
-### ROI模型计算器
-交互式投资回报率分析工具
-
-商业价值 情景分析
-
-⚔️
-
-### 竞品分析报告
-深度拆解三大品牌的用户运营策略
-
-市场分析 SWOT分析
-
-🔧
-
-### 技术方案文档
-详细的AI agent架构设计和实施路线图
-
-技术深度 架构设计
-
-🎬
-
-### 演示视频故事板
-30秒演示视频的完整脚本设计
-
-演示准备 脚本设计
- </textarea>
+</head>
+<body>
+    <div class="hero">
+        <h1>AI智能关怀助手</h1>
+        <p class="subtitle">基于情景感知的智能咖啡服务推荐系统<br>让每一次推送都充满温度</p>
+        <div class="stats">
+            <div class="stat"><div class="value">3.2x</div><div class="label">打开意愿提升</div></div>
+            <div class="stat"><div class="value">68%</div><div class="label">点击转化率</div></div>
+            <div class="stat"><div class="value">4.6/5</div><div class="label">用户好感度</div></div>
+            <div class="stat"><div class="value">P&lt;0.05</div><div class="label">统计显著性</div></div>
+        </div>
+    </div>
+    <div class="container">
+        <h2 class="section-title">参赛材料</h2>
+        <p class="section-desc">点击下方卡片查看各模块详细内容</p>
+        <div class="card-grid">
+            <div class="card" onclick="window.open('demo.html','_blank')"><div class="card-header demo">💬</div><div class="card-body"><h3>可交互Demo原型</h3><p>模拟AI agent对话界面，展示加班关怀和雨天关怀两大核心场景</p><div class="tags"><span class="tag highlight">核心亮点</span><span class="tag">情景感知</span></div></div></div>
+            <div class="card" onclick="window.open('data_report.html','_blank')"><div class="card-header data">📊</div><div class="card-body"><h3>数据报告</h3><p>基于30人实验组A/B测试的详细数据分析</p><div class="tags"><span class="tag highlight">数据支撑</span><span class="tag">A/B测试</span></div></div></div>
+            <div class="card" onclick="window.open('user_persona.html','_blank')"><div class="card-header persona">👥</div><div class="card-body"><h3>用户画像分析</h3><p>基于8位深度访谈提炼核心洞察和需求痛点</p><div class="tags"><span class="tag">用户研究</span><span class="tag">深度访谈</span></div></div></div>
+            <div class="card" onclick="window.open('roi_calculator.html','_blank')"><div class="card-header roi">💰</div><div class="card-body"><h3>ROI模型计算器</h3><p>交互式投资回报率分析工具，支持三种情景模拟</p><div class="tags"><span class="tag highlight">商业价值</span><span class="tag">情景分析</span></div></div></div>
+            <div class="card" onclick="window.open('competitive_analysis.html','_blank')"><div class="card-header competitive">⚔️</div><div class="card-body"><h3>竞品分析报告</h3><p>深度拆解星巴克、库迪、Manner三大品牌策略</p><div class="tags"><span class="tag">市场分析</span><span class="tag">SWOT分析</span></div></div></div>
+            <div class="card" onclick="window.open('technical_docs.html','_blank')"><div class="card-header tech">🔧</div><div class="card-body"><h3>技术方案文档</h3><p>详细的AI agent架构设计、RAG知识库结构</p><div class="tags"><span class="tag">技术深度</span><span class="tag">架构设计</span></div></div></div>
+            <div class="card" onclick="window.open('video_storyboard.html','_blank')"><div class="card-header video">🎬</div><div class="card-body"><h3>演示视频故事板</h3><p>30秒演示视频的完整脚本设计</p><div class="tags"><span class="tag">演示准备</span><span class="tag">脚本设计</span></div></div></div>
+        </div>
+    </div>
+    <div class="footer">AI智能关怀助手 | AI未来人才大赛参赛方案</div>
+</body>
+</html>
