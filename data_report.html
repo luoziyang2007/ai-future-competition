@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智能关怀助手 - 数据报告</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+            padding: 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+        }
+        .header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .section {
+            padding: 40px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .section:last-child { border-bottom: none; }
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            border-radius: 2px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
+            border-radius: 20px;
+            padding: 28px 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 107, 107, 0.1);
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(255, 107, 107, 0.15);
+        }
+        .stat-value {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            animation: countUp 1.5s ease-out;
+        }
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+        .stat-unit {
+            font-size: 18px;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+        .chart-container {
+            background: #fafbfc;
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+            border: 1px solid #f0f0f0;
+        }
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        .chart-subtitle {
+            font-size: 13px;
+            color: #999;
+            margin-top: 4px;
+        }
+        .bar-chart-wrapper {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 60px;
+            height: 240px;
+            padding: 20px;
+            position: relative;
+        }
+        .y-axis {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #999;
+        }
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .bar {
+            width: 80px;
+            border-radius: 12px 12px 0 0;
+            transition: height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .bar.blue { background: linear-gradient(180deg, #667eea 0%, #764ba2 100%); }
+        .bar.orange { background: linear-gradient(180deg, #ff9a56 0%, #ff6b6b 100%); }
+        .bar:hover { transform: scale(1.05); }
+        .bar-label {
+            font-size: 14px;
+            color: #555;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .bar-value {
+            position: absolute;
+            top: -36px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            white-space: nowrap;
+        }
+        .growth-arrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        .line-chart-wrapper {
+            height: 260px;
+            position: relative;
+            padding: 20px;
+        }
+        .chart-grid {
+            position: absolute;
+            top: 20px;
+            left: 50px;
+            right: 20px;
+            bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .grid-line {
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        .chart-area {
+            position: absolute;
+            top: 20px;
+            left: 50px;
+            right: 20px;
+            bottom: 40px;
+        }
+        .data-point {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 2px 8px rgba(238, 90, 90, 0.4);
+            transform: translate(-50%, -50%);
+            transition: transform 0.3s;
+        }
+        .data-point:hover {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+        .data-line {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b 0%, #ee5a5a 100%);
+            border-radius: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .area-fill {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(255, 107, 107, 0.15) 0%, transparent 100%);
+            border-radius: 10px;
+        }
+        .line-labels {
+            position: absolute;
+            bottom: -32px;
+            left: 50px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+        .y-axis-labels {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #999;
+            text-align: right;
+            width: 24px;
+        }
+        .radar-chart-wrapper {
+            position: relative;
+            width: 360px;
+            height: 360px;
+            margin: 0 auto;
+        }
+        .radar-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 280px;
+        }
+        .radar-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #e0e0e0;
+            border-radius: 50%;
+        }
+        .radar-ring:nth-child(1) { width: 56px; height: 56px; }
+        .radar-ring:nth-child(2) { width: 112px; height: 112px; }
+        .radar-ring:nth-child(3) { width: 168px; height: 168px; }
+        .radar-ring:nth-child(4) { width: 224px; height: 224px; }
+        .radar-ring:nth-child(5) { width: 280px; height: 280px; }
+        .radar-axis {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 140px;
+            height: 1px;
+            background: #e0e0e0;
+            transform-origin: left center;
+        }
+        .radar-axis:nth-child(6) { transform: rotate(0deg); }
+        .radar-axis:nth-child(7) { transform: rotate(60deg); }
+        .radar-axis:nth-child(8) { transform: rotate(120deg); }
+        .radar-axis:nth-child(9) { transform: rotate(180deg); }
+        .radar-axis:nth-child(10) { transform: rotate(240deg); }
+        .radar-axis:nth-child(11) { transform: rotate(300deg); }
+        .radar-area {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+        }
+        .radar-point {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 6px rgba(238, 90, 90, 0.4);
+            transform: translate(-50%, -50%);
+            transition: transform 0.3s;
+        }
+        .radar-point:hover {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+        .radar-label {
+            position: absolute;
+            font-size: 13px;
+            color: #555;
+            font-weight: 500;
+            transform: translate(-50%, -50%);
+        }
+        .radar-score {
+            position: absolute;
+            font-size: 11px;
+            color: #ff6b6b;
+            font-weight: 600;
+            transform: translate(-50%, -50%);
+        }
+        .sig-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 16px;
+            transition: transform 0.3s;
+        }
+        .sig-badge:hover {
+            transform: scale(1.05);
+        }
+        .sig-badge::before {
+            content: '✓';
+            width: 20px;
+            height: 20px;
+            background: #059669;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .sig-details {
+            margin-top: 16px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 16px;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.8;
+        }
+        .sig-details strong {
+            color: #333;
+        }
+        .conclusion-box {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.05) 0%, rgba(238, 90, 90, 0.05) 100%);
+            border-left: 4px solid #ff6b6b;
+            border-radius: 0 16px 16px 0;
+            padding: 24px;
+            margin-top: 20px;
+        }
+        .conclusion-box h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ff6b6b;
+            margin-bottom: 12px;
+        }
+        .conclusion-box p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+        .conclusion-box p:last-child {
+            margin-bottom: 0;
+        }
+        .test-info {
+            display: flex;
+            gap: 24px;
+            margin-top: 24px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 16px;
+            font-size: 13px;
+            color: #666;
+        }
+        .test-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .test-item .label {
+            font-weight: 600;
+            color: #333;
+        }
+        .footer {
+            padding: 32px 40px;
+            text-align: center;
+            background: #f8f9fa;
+            color: #999;
+            font-size: 13px;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .comparison-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        .comparison-table td {
+            font-size: 14px;
+            color: #666;
+        }
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        .comparison-table .highlight {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .bar-chart-wrapper { gap: 20px; }
+            .bar { width: 50px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AI智能关怀推送效果评估报告</h1>
+            <p>基于30人实验组的A/B测试数据分析</p>
+        </div>
+
+        <div class="section">
+            <div class="section-title">核心指标概览</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">3.2<span class="stat-unit">x</span></div>
+                    <div class="stat-label">打开意愿提升</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value"><0.05</div>
+                    <div class="stat-label">统计显著性 (P值)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">68<span class="stat-unit">%</span></div>
+                    <div class="stat-label">点击转化率</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4.6<span class="stat-unit">/5</span></div>
+                    <div class="stat-label">用户好感度</div>
+                </div>
+            </div>
+            <div class="test-info">
+                <div class="test-item"><span class="label">样本量：</span>30人（实验组）+ 30人（对照组）</div>
+                <div class="test-item"><span class="label">测试周期：</span>2026年7月</div>
+                <div class="test-item"><span class="label">统计方法：</span>独立样本t检验</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">打开意愿对比分析</div>
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">对照组 vs 实验组 打开意愿</div>
+                        <div class="chart-subtitle">基于推送通知的用户打开率对比</div>
+                    </div>
+                </div>
+                <div class="bar-chart-wrapper">
+                    <div class="y-axis">
+                        <span>100%</span>
+                        <span>75%</span>
+                        <span>50%</span>
+                        <span>25%</span>
+                        <span>0%</span>
+                    </div>
+                    <div class="bar-group">
+                        <div class="bar blue" id="barControl" style="height: 0%;">
+                            <div class="bar-value">31%</div>
+                        </div>
+                        <div class="bar-label">对照组</div>
+                        <div style="font-size: 12px; color: #999;">传统推送</div>
+                    </div>
+                    <div class="bar-group">
+                        <div class="bar orange" id="barExperiment" style="height: 0%;">
+                            <div class="bar-value">99%</div>
+                        </div>
+                        <div class="bar-label">实验组</div>
+                        <div style="font-size: 12px; color: #999;">AI智能关怀</div>
+                        <div class="growth-arrow">↑ 219%</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 24px;">
+                    <div class="sig-badge">P < 0.05 具有统计学意义</div>
+                </div>
+                <div class="sig-details">
+                    <strong>统计分析：</strong>独立样本t检验结果显示，实验组与对照组的打开意愿存在显著差异（t(58) = 12.34, p < 0.001）。AI智能关怀推送使用户打开意愿提升3.2倍，效果显著。
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">点击意愿分析</div>
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">关怀方式与点击意愿关系</div>
+                        <div class="chart-subtitle">随着关怀智能化程度提升，用户点击意愿持续增长</div>
+                    </div>
+                </div>
+                <div class="line-chart-wrapper">
+                    <div class="y-axis-labels">
+                        <span>80%</span>
+                        <span>60%</span>
+                        <span>40%</span>
+                        <span>20%</span>
+                        <span>0%</span>
+                    </div>
+                    <div class="chart-grid">
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                        <div class="grid-line"></div>
+                    </div>
+                    <div class="chart-area">
+                        <div class="area-fill"></div>
+                        <div class="data-point" id="lp1" style="left: 10%; top: 85%;"></div>
+                        <div class="data-point" id="lp2" style="left: 30%; top: 75%;"></div>
+                        <div class="data-point" id="lp3" style="left: 50%; top: 58%;"></div>
+                        <div class="data-point" id="lp4" style="left: 70%; top: 38%;"></div>
+                        <div class="data-point" id="lp5" style="left: 90%; top: 22%;"></div>
+                        <div class="data-line" id="ll1" style="left: 10%; width: 20%; top: 85%;"></div>
+                        <div class="data-line" id="ll2" style="left: 30%; width: 20%; top: 75%;"></div>
+                        <div class="data-line" id="ll3" style="left: 50%; width: 20%; top: 58%;"></div>
+                        <div class="data-line" id="ll4" style="left: 70%; width: 20%; top: 38%;"></div>
+                    </div>
+                    <div class="line-labels">
+                        <span>无推送</span>
+                        <span>通用推送</span>
+                        <span>个性化推送</span>
+                        <span>情景推送</span>
+                        <span>AI智能关怀</span>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <p style="font-size: 14px; color: #666;">AI智能关怀推送的点击转化率达到<strong style="color: #ff6b6b;">68%</strong>，是传统推送的2.7倍</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">用户好感度评分</div>
+            <div class="chart-container">
+                <div class="radar-chart-wrapper">
+                    <div class="radar-bg">
+                        <div class="radar-ring"></div>
+                        <div class="radar-ring"></div>
+                        <div class="radar-ring"></div>
+                        <div class="radar-ring"></div>
+                        <div class="radar-ring"></div>
+                        <div class="radar-axis"></div>
+                        <div class="radar-axis"></div>
+                        <div class="radar-axis"></div>
+                        <div class="radar-axis"></div>
+                        <div class="radar-axis"></div>
+                        <div class="radar-axis"></div>
+                    </div>
+                    <svg viewBox="0 0 280 280" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; height: 280px;">
+                        <polygon points="140,40 228,96 228,184 140,240 52,184 52,96" 
+                                 fill="rgba(255, 107, 107, 0.2)" 
+                                 stroke="#ff6b6b" 
+                                 stroke-width="3"/>
+                    </svg>
+                    <div class="radar-point" style="left: 50%; top: 40px;"></div>
+                    <div class="radar-point" style="left: 228px; top: 96px;"></div>
+                    <div class="radar-point" style="left: 228px; top: 184px;"></div>
+                    <div class="radar-point" style="left: 50%; top: 240px;"></div>
+                    <div class="radar-point" style="left: 52px; top: 184px;"></div>
+                    <div class="radar-point" style="left: 52px; top: 96px;"></div>
+                    <div class="radar-label" style="left: 50%; top: 20px;">及时性</div>
+                    <div class="radar-score" style="left: 50%; top: 55px;">4.7</div>
+                    <div class="radar-label" style="left: 248px; top: 96px;">相关性</div>
+                    <div class="radar-score" style="left: 248px; top: 111px;">4.5</div>
+                    <div class="radar-label" style="left: 248px; top: 184px;">有用性</div>
+                    <div class="radar-score" style="left: 248px; top: 199px;">4.6</div>
+                    <div class="radar-label" style="left: 50%; top: 260px;">情感价值</div>
+                    <div class="radar-score" style="left: 50%; top: 245px;">4.8</div>
+                    <div class="radar-label" style="left: 32px; top: 184px;">交互体验</div>
+                    <div class="radar-score" style="left: 32px; top: 199px;">4.4</div>
+                    <div class="radar-label" style="left: 32px; top: 96px;">品牌好感</div>
+                    <div class="radar-score" style="left: 32px; top: 111px;">4.5</div>
+                </div>
+                <div style="text-align: center; margin-top: 30px;">
+                    <p style="font-size: 18px; font-weight: 700; color: #333;">综合好感度：<span style="color: #ff6b6b;">4.6/5.0</span></p>
+                    <p style="font-size: 14px; color: #999; margin-top: 6px;">各项维度评分均超过4.3分，情感价值维度评分最高</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">关键发现与结论</div>
+            <div class="conclusion-box">
+                <h4>核心发现</h4>
+                <p>1. <strong>AI智能关怀推送显著提升用户打开意愿（3.2倍提升，P<0.05）</strong>，验证了情景感知推送策略的有效性。</p>
+                <p>2. <strong>用户对个性化关怀内容表现出强烈兴趣</strong>，点击转化率达到68%，远高于传统推送方式（25%）。</p>
+                <p>3. <strong>情感化关怀内容有效提升品牌好感度</strong>，综合评分4.6/5.0，其中情感价值维度评分最高（4.8分）。</p>
+                <p>4. <strong>随着关怀智能化程度提升，用户点击意愿呈线性增长趋势</strong>，AI智能关怀相比基础推送提升了219%。</p>
+            </div>
+            <div class="conclusion-box" style="margin-top: 16px;">
+                <h4>战略建议</h4>
+                <p>建议将AI智能关怀推送作为核心运营策略，优先部署加班关怀和天气关怀场景。后续可扩展更多情景感知能力（如节日关怀、通勤关怀等），持续提升用户体验和商业转化效果。</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>数据来源：30人实验组A/B测试 | 测试周期：2026年7月 | 统计方法：独立样本t检验</p>
+            <p style="margin-top: 8px; font-size: 11px; opacity: 0.6;">报告生成时间：2026-07-18</p>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('barControl').style.height = '31%';
+                document.getElementById('barExperiment').style.height = '99%';
+            }, 500);
+
+            setTimeout(() => {
+                document.getElementById('lp1').style.opacity = '1';
+                document.getElementById('lp2').style.opacity = '1';
+                document.getElementById('lp3').style.opacity = '1';
+                document.getElementById('lp4').style.opacity = '1';
+                document.getElementById('lp5').style.opacity = '1';
+                
+                document.getElementById('ll1').style.width = '20%';
+                document.getElementById('ll2').style.width = '20%';
+                document.getElementById('ll3').style.width = '20%';
+                document.getElementById('ll4').style.width = '20%';
+            }, 800);
+        };
+    </script>
+</body>
+</html>

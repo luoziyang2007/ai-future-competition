@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI未来人才大赛 - 演示视频故事板</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 15px;
+        }
+        .overview-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .overview-card h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .overview-card h2::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: #ff6b6b;
+            border-radius: 2px;
+        }
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .overview-item {
+            text-align: center;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .overview-item .num {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff6b6b;
+            margin-bottom: 4px;
+        }
+        .overview-item .label {
+            font-size: 12px;
+            color: #666;
+        }
+        .scene-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .scene-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        .scene-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .scene-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .scene-info {
+            flex: 1;
+        }
+        .scene-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .scene-info p {
+            font-size: 13px;
+            color: #999;
+        }
+        .duration-badge {
+            padding: 4px 12px;
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .scene-content {
+            margin-top: 16px;
+        }
+        .content-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .content-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .content-item h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .content-item p {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+        .content-item.narration p {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        .phone-mockup {
+            background: #000;
+            border-radius: 30px;
+            padding: 12px;
+            margin-top: 16px;
+            max-width: 280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .phone-screen {
+            background: #fff;
+            border-radius: 24px;
+            padding: 16px;
+            min-height: 400px;
+            position: relative;
+        }
+        .phone-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .phone-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .phone-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+        .phone-subtitle {
+            font-size: 11px;
+            color: #999;
+        }
+        .phone-message {
+            background: #f0f0f0;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 8px;
+            max-width: 80%;
+        }
+        .phone-message.user {
+            background: #ff6b6b;
+            color: white;
+            margin-left: auto;
+        }
+        .phone-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #ff6b6b;
+            border-radius: 16px;
+            font-size: 12px;
+            color: #ff6b6b;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .phone-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #eee;
+        }
+        .phone-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .phone-card-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .phone-card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+        .phone-card-price {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ff6b6b;
+        }
+        .success-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 16px;
+        }
+        .success-badge .icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        .success-badge .text {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .equipment-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 24px;
+        }
+        .equipment-section h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+        }
+        .equipment-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .equipment-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .equipment-icon {
+            width: 28px;
+            height: 28px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .equipment-item span {
+            font-size: 13px;
+            color: #333;
+        }
+        .tips-section {
+            background: rgba(245, 158, 11, 0.05);
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 12px 12px 0;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .tips-section h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 12px;
+        }
+        .tips-section ul {
+            font-size: 13px;
+            color: #666;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: #999;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>演示视频故事板脚本</h1>
+            <p>加班场景下AI智能关怀服务完整演示</p>
+        </div>
+
+        <div class="overview-card">
+            <h2>视频概览</h2>
+            <div class="overview-grid">
+                <div class="overview-item">
+                    <div class="num">30</div>
+                    <div class="label">总时长（秒）</div>
+                </div>
+                <div class="overview-item">
+                    <div class="num">6</div>
+                    <div class="label">场景数</div>
+                </div>
+                <div class="overview-item">
+                    <div class="num">1</div>
+                    <div class="label">核心故事</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scene-list">
+            <div class="scene-card">
+                <div class="scene-header">
+                    <div class="scene-number">1</div>
+                    <div class="scene-info">
+                        <h3>开场：加班场景设定</h3>
+                        <p>展示用户深夜加班的工作环境</p>
+                    </div>
+                    <div class="duration-badge">0-3秒</div>
+                </div>
+                <div class="content-row">
+                    <div class="content-item">
+                        <h4>画面内容</h4>
+                        <p>手机屏幕显示时间21:30，用户正在电脑前工作，屏幕上有很多代码/文档</p>
+                    </div>
+                    <div class="content-item narration">
+                        <h4>旁白解说</h4>
+                        <p>"晚上九点半，还在加班？"</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scene-card">
+                <div class="scene-header">
+                    <div class="scene-number">2</div>
+                    <div class="scene-info">
+                        <h3>AI推送：关怀消息到达</h3>
+                        <p>手机收到AI智能关怀推送</p>
+                    </div>
+                    <div class="duration-badge">3-7秒</div>
+                </div>
+                <div class="content-row">
+                    <div class="content-item">
+                        <h4>画面内容</h4>
+                        <p>手机弹出推送通知："瑞幸智能助手：嗨，我注意到您今天工作到很晚了，辛苦了！"</p>
+                    </div>
+                    <div class="content-item narration">
+                        <h4>旁白解说</h4>
+                        <p>"瑞幸AI智能助手，时刻关注您的状态。"</p>
+                    </div>
+                </div>
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div style="background: #ff6b6b; padding: 8px 16px; border-radius: 20px 20px 0 0; color: white; font-size: 12px;">
+                            推送通知
+                        </div>
+                        <div style="padding: 16px;">
+                            <div class="phone-header">
+                                <div class="phone-avatar">🤖</div>
+                                <div>
+                                    <div class="phone-title">瑞幸智能助手</div>
+                                    <div class="phone-subtitle">刚刚</div>
+                                </div>
+                            </div>
+                            <div class="phone-message">嗨，我注意到您今天工作到很晚了，辛苦了！😔</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scene-card">
+                <div class="scene-header">
+                    <div class="scene-number">3</div>
+                    <div class="scene-info">
+                        <h3>对话交互：关怀推荐</h3>
+                        <p>用户点开推送，进入对话界面</p>
+                    </div>
+                    <div class="duration-badge">7-14秒</div>
+                </div>
+                <div class="content-row">
+                    <div class="content-item">
+                        <h4>画面内容</h4>
+                        <p>AI继续推荐："加班到这么晚，要不要来一杯提神的咖啡？" 下方显示快捷回复按钮</p>
+                    </div>
+                    <div class="content-item narration">
+                        <h4>旁白解说</h4>
+                        <p>"AI主动关怀，精准推荐加班专属饮品。"</p>
+                    </div>
+                </div>
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="phone-header">
+                            <div class="phone-avatar">🤖</div>
+                            <div>
+                                <div class="phone-title">瑞幸智能助手</div>
+                                <div class="phone-subtitle">24小时为您服务</div>
+                            </div>
+                        </div>
+                        <div class="phone-message">嗨，我注意到您今天工作到很晚了，辛苦了！😔</div>
+                        <div class="phone-message">加班到这么晚，要不要来一杯提神的咖啡？</div>
+                        <div style="margin-top: 8px;">
+                            <span class="phone-button">好啊，来一杯</span>
+                            <span class="phone-button">不用了，谢谢</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scene-card">
+                <div class="scene-header">
+                    <div class="scene-number">4</div>
+                    <div class="scene-info">
+                        <h3>选择商品：服务卡片展示</h3>
+                        <p>用户选择后，展示推荐商品卡片</p>
+                    </div>
+                    <div class="duration-badge">14-21秒</div>
+                </div>
+                <div class="content-row">
+                    <div class="content-item">
+                        <h4>画面内容</h4>
+                        <p>用户点击"好啊，来一杯"，AI展示加班专属套餐卡片：冰美式咖啡（¥15.9，加班特惠）、元气小食组合（¥12.9，能量补给）</p>
+                    </div>
+                    <div class="content-item narration">
+                        <h4>旁白解说</h4>
+                        <p>"一键查看加班专属套餐，优惠多多。"</p>
+                    </div>
+                </div>
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="phone-header">
+                            <div class="phone-avatar">🤖</div>
+                            <div>
+                                <div class="phone-title">瑞幸智能助手</div>
+                                <div class="phone-subtitle">24小时为您服务</div>
+                            </div>
+                        </div>
+                        <div class="phone-message">嗨，我注意到您今天工作到很晚了，辛苦了！😔</div>
+                        <div class="phone-message">加班到这么晚，要不要来一杯提神的咖啡？</div>
+                        <div class="phone-message user">好啊，来一杯</div>
+                        <div class="phone-message">为您推荐加班专属套餐：</div>
+                        <div class="phone-card">
+                            <div class="phone-card-header">
+                                <div class="phone-card-icon">☕</div>
+                                <div style="flex: 1;">
+                                    <div class="phone-card-title">冰美式咖啡 <span style="font-size: 10px; color: #ff6b6b; margin-left: 4px;">加班特惠</span></div>
+                                    <div style="font-size: 11px; color: #999;">提神醒脑，加班必备</div>
+                                </div>
+                                <div class="phone-card-price">¥15.9</div>
+                            </div>
+                        </div>
+                        <div class="phone-card">
+                            <div class="phone-card-header">
+                                <div class="phone-card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">🍪</div>
+                                <div style="flex: 1;">
+                                    <div class="phone-card-title">元气小食组合 <span style="font-size: 10px; color: #ff6b6b; margin-left: 4px;">能量补给</span></div>
+                                    <div style="font-size: 11px; color: #999;">补充能量，再战职场</div>
+                                </div>
+                                <div class="phone-card-price">¥12.9</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scene-card">
+                <div class="scene-header">
+                    <div class="scene-number">5</div>
+                    <div class="scene-info">
+                        <h3>完成下单：点击商品卡片</h3>
+                        <p>用户点击商品卡片完成下单</p>
+                    </div>
+                    <div class="duration-badge">21-26秒</div>
+                </div>
+                <div class="content-row">
+                    <div class="content-item">
+                        <h4>画面内容</h4>
+                        <p>用户点击冰美式咖啡卡片，AI回复："好的，冰美式咖啡已加入购物车！"</p>
+                    </div>
+                    <div class="content-item narration">
+                        <h4>旁白解说</h4>
+                        <p>"点击即可下单，无需跳转页面。"</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scene-card">
+                <div class="scene-header">
+                    <div class="scene-number">6</div>
+                    <div class="scene-info">
+                        <h3>结尾：下单成功</h3>
+                        <p>展示下单成功界面</p>
+                    </div>
+                    <div class="duration-badge">26-30秒</div>
+                </div>
+                <div class="content-row">
+                    <div class="content-item">
+                        <h4>画面内容</h4>
+                        <p>绿色成功提示："🎉 下单成功！冰美式咖啡 预计5分钟后可取"</p>
+                    </div>
+                    <div class="content-item narration">
+                        <h4>旁白解说</h4>
+                        <p>"AI智能关怀，让加班也有温暖陪伴。瑞幸智能助手，懂你所需。"</p>
+                    </div>
+                </div>
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="phone-header">
+                            <div class="phone-avatar">🤖</div>
+                            <div>
+                                <div class="phone-title">瑞幸智能助手</div>
+                                <div class="phone-subtitle">24小时为您服务</div>
+                            </div>
+                        </div>
+                        <div class="phone-message">好的，冰美式咖啡已加入购物车！</div>
+                        <div class="success-badge">
+                            <div class="icon">🎉</div>
+                            <div class="text">下单成功!</div>
+                            <div style="font-size: 11px; opacity: 0.9; margin-top: 2px;">冰美式咖啡 预计5分钟后可取</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="equipment-section">
+            <h2>录制设备清单</h2>
+            <div class="equipment-list">
+                <div class="equipment-item">
+                    <div class="equipment-icon">📱</div>
+                    <span>iPhone 14 Pro（演示手机）</span>
+                </div>
+                <div class="equipment-item">
+                    <div class="equipment-icon">🎤</div>
+                    <span>领夹麦克风（旁白录音）</span>
+                </div>
+                <div class="equipment-item">
+                    <div class="equipment-icon">📹</div>
+                    <span>手机三脚架（固定拍摄）</span>
+                </div>
+                <div class="equipment-item">
+                    <div class="equipment-icon">💻</div>
+                    <span>电脑（运行演示网页）</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tips-section">
+            <h3>录制注意事项</h3>
+            <ul>
+                <li>保持手机屏幕亮度充足，避免反光</li>
+                <li>旁白解说语速适中，清晰有力，带感情色彩</li>
+                <li>操作时手指点击位置准确，动作流畅</li>
+                <li>确保网络连接稳定，演示页面加载顺畅</li>
+                <li>后期可添加背景音乐（轻快、温暖风格）</li>
+                <li>视频分辨率设置为1080p，帧率30fps</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            视频故事板版本：v1.0 | 适用场景：加班关怀服务演示
+        </div>
+    </div>
+</body>
+</html>
